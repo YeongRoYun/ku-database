@@ -19,3 +19,6 @@
 ## 설계
 - [Entity Relationship Diagram](document/erd.md)
 - [Architecture](document/architecture.md)
+## 디자인
+- [SQL Schema](database/schema.sql)
+-

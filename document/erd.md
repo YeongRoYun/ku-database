@@ -36,6 +36,7 @@ STR name PK
 }
 products {
 INT id PK
+INT category_id FK,PK
 STR name
 STR description
 URL image
@@ -49,7 +50,7 @@ REAL price
 }
 product_brands {
 INT product_id PK, FK
-INT id PK
+INT brand_id PK, FK
 REAL price
 REAL event_price
 }
@@ -65,7 +66,7 @@ product_bests o{--|| brands: sell
 product_bests o{--o{ product_events: progress
 products ||--|{ product_brands: sell
 product_brands o{--o{ product_events: progress
-product_brands |{--|{ brands: sell
+product_brands |{--|| brands: sell
 
     brands ||--o{ events: progress
     events ||--|{ event_images: pamphlet
@@ -126,8 +127,8 @@ product_brands |{--|{ brands: sell
 - N:N Relationship
 - 한 상품의 최저 가격은 여러 상품 행사와 연관될 수 있고, 상품 행사 정보 역시 여러 상품의 최저 가격과 연관될 수 있다.
 
-**product_brands -- brands**
-- N:N Relationship
+**product_brands --> brands**
+- N:1 Relationship
 - 한 상품이 팔리는 편의점은 여러 편의점과 연관될 수 있고, 편의점은 여러 상품을 팔 수 있다.
 
 **product_brands -- product_events**
