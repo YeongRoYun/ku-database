@@ -1,0 +1,97 @@
+# Architecture
+> SOA + Domain 기반 + MVC & Humble Pattern
+
+```mermaid
+---
+title: Pyoniverse Dashboard Architecture
+---
+C4Component
+    title Pyoniverse Dashboard Architecture
+    Person(admin, "Pyoniverse Manager")
+    Component(gateway, "Gateway", "")
+    BiRel(admin, gateway, "Request/Response")
+    UpdateRelStyle(admin, gateway, $offsetX="-50", $offsetY="-10")
+
+    Container_Boundary(web_boundary, "Dashboard Web Application") {
+        Component(middleware, "Middleware", "", "Security & Log")
+        BiRel(gateway, middleware, "Verify/Log")
+
+        Container_Boundary(product_domain, "Products") {
+            Component(product_controller, "Controller")
+            Component(product_business, "Business")
+            Component(product_entity, "ProductEntity")
+
+            BiRel(middleware, product_controller, "handle")
+            BiRel(product_controller, product_business, "process")
+            BiRel(product_controller, view, "Render")
+            BiRel(product_business, product_entity, "use")
+            BiRel(product_business, brand_entity, "use")
+            UpdateRelStyle(product_controller, view, $textColor="blue")
+            UpdateRelStyle(product_controller, product_business, $textColor="green", $lineColor="red")
+            UpdateRelStyle(product_business, product_entity, $textColor="green", $lineColor="red")
+            UpdateRelStyle(product_business, brand_entity, $textColor="blue")
+        }
+
+        Container_Boundary(event_domain, "Events") {
+            Component(event_controller, "Controller")
+            Component(event_business, "Business")
+            Component(event_entity, "EventEntity")
+
+            BiRel(middleware, event_controller, "handle")
+            BiRel(event_controller, event_business, "process")
+            BiRel(event_controller, view, "Render")
+            BiRel(event_business, event_entity, "use")
+            BiRel(event_business, brand_entity, "use")
+            UpdateRelStyle(event_controller, view, $textColor="blue")
+            UpdateRelStyle(event_controller, event_business, $textColor="green", $lineColor="red")
+            UpdateRelStyle(event_business, event_entity, $textColor="green", $lineColor="red")
+            UpdateRelStyle(event_business, brand_entity, $textColor="blue")
+        }
+        Container_Boundary(common, "Comman") {
+            Component(view, "View", "", "Provides Dashboard UI")
+            Component(brand_entity, "BrandEntity")
+            ComponentDb(rdb, "RDB", "MariaDB", "Dashboard DB")
+            BiRel(brand_entity, rdb, "persist")
+            BiRel(product_entity, rdb, "persist")
+            BiRel(event_entity, rdb, "persist")
+            UpdateRelStyle(brand_entity, rdb, $textColor="pupple", $lineColor="blue")
+            UpdateRelStyle(event_entity, rdb, $textColor="pupple", $lineColor="blue")
+            UpdateRelStyle(product_entity, rdb, $textColor="pupple", $lineColor="blue")
+        }
+    }
+    Container_Boundary(migration_boundary, "Data Migration") {
+        Component(migrator, "Migrator", "", "Migrate from documentDB/rDB to rDB/documentDB")
+        ComponentDb(document_db, "DocumentDB", "MongoDB", "Service DB")
+        ComponentDb(tmp_storage, "S3", "Dump/Load Data Storage")
+        Rel(document_db, tmp_storage, "Dump")
+        Rel(rdb, tmp_storage, "Dump")
+        Rel(tmp_storage, migrator, "Load & Convert format")
+        Rel(migrator, document_db, "Update Data")
+        Rel(migrator, rdb, "Update Data")
+        UpdateRelStyle(document_db, tmp_storage, $textColor="red", $lineColor="green")
+        UpdateRelStyle(rdb, tmp_storage, $textColor="red", $lineColor="green")
+        UpdateRelStyle(tmp_storage, migrator, $textColor="red", $lineColor="green")
+        UpdateRelStyle(migrator, document_db, $textColor="red", $lineColor="green")
+        UpdateRelStyle(migrator, rdb, $textColor="red", $lineColor="green")
+    }
+```
+## 아키텍처 고려사항
+### 아키텍처 특성
+**보안성**
+프로젝트 관리자만 데이터를 수정할 수 있어야 한다.
+
+**사용성**
+서비스 사용방법을 익히는데 적은 시간이 들어야 한다.
+
+**신뢰성**
+수정 결과는 운영 환경에 반영되고, 이후 데이터가 덮어씌워지지 않는다.
+
+### 아키텍처 결정
+- 변경된 데이터는 일단위로 반영된다.
+- 서비스는 Full-stack 개발자 1인에 의해 개발된다.
+
+### 설계원칙
+- 테스트 코드부터 작성해야 한다.
+- Humble 패턴을 사용해야 한다.
+- commit 전에 코드 정리 및 테스트케이스를 통과해야 한다.
+- 배포는 자동으로 이루어져야 한다.
