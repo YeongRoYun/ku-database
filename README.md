@@ -16,9 +16,11 @@
 4. 대시보드의 데이터 수정 결과는 운영 DB에 반영되고, 다른 방식의 데이터 업데이트 결과로 덮어씌워지지 않는다.
 5. 데이터 업데이트는 하루 한번으로 제한한다.
 6. 대시보드에서 업데이트된 속성을 확인할 수 있어야 한다.
-## 설계
-- [Entity Relationship Diagram](document/erd.md)
-- [Architecture](document/architecture.md)
-## 디자인
+## 데이터 설계
+- [Entity Relationship Diagram](doc/erd.md)
+## 기능 설계
+- [Architecture](doc/architecture.md)
+- [Module Design](doc/module.md)
+## 구현
 - [SQL Schema](database/schema.sql)
--
+- [Code Summary](doc/implementation.md)

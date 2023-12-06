@@ -16,24 +16,24 @@ STR name
 STR slug
 URL image
 }
-events {
-INT brand_id PK, FK
-INT id PK
-STR name
-STR description
-DATE start_at
-DATE end_at
-INT good_count
-INT view_count
-}
-event_images {
-INT event_id PK,FK
-STR type PK, FK
-URL url PK
-}
-event_image_types {
-STR name PK
-}
+%%events {
+%%INT brand_id PK, FK
+%%INT id PK
+%%STR name
+%%STR description
+%%DATE start_at
+%%DATE end_at
+%%INT good_count
+%%INT view_count
+%%}
+%%event_images {
+%%INT event_id PK,FK
+%%STR type PK, FK
+%%URL url PK
+%%}
+%%event_image_types {
+%%STR name PK
+%%}
 products {
 INT id PK
 INT category_id FK,PK
@@ -46,6 +46,7 @@ INT view_count
 }
 product_bests {
 INT product_id PK, FK
+INT brand_id PK, FK
 REAL price
 }
 product_brands {
@@ -60,6 +61,12 @@ STR name
 STR slug
 STR description
 }
+
+sessions {
+    STR id PK
+    DATETIME expired_at
+}
+
 categories ||--o{ products : categorize
 products ||--|| product_bests: recommend
 product_bests o{--|| brands: sell
@@ -68,9 +75,9 @@ products ||--|{ product_brands: sell
 product_brands o{--o{ product_events: progress
 product_brands |{--|| brands: sell
 
-    brands ||--o{ events: progress
-    events ||--|{ event_images: pamphlet
-    event_image_types ||--|{ event_images: categorize
+%%brands ||--o{ events: progress
+%%events ||--|{ event_images: pamphlet
+%%event_image_types ||--|{ event_images: categorize
 ```
 ## Entity Set
 **categories**

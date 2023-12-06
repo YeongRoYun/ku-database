@@ -1,0 +1,14 @@
+{
+    "name": "pyoniverse/dashboard",
+    "description": "Admin Data Dashboard for pyoniverse project",
+    "type": "project",
+    "authors": [
+        {
+            "name": "YeongRoYun",
+            "email": "58219267+YeongRoYun@users.noreply.github.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    }
+}
