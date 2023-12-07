@@ -7,12 +7,37 @@ classDiagram
         + register(Middleware middleware)
     }
     class Controller {
-        <<interface>>
+        <<abstract>>
+        + Business business
     }
     class Middleware {
         <<interface>>
         + intercept_request(args)
         + intercept_response(args)
     }
+    class Business {
+        <<interface>>
+    }
+    Router ..> Controller: Route
+    Router ..> Middleware: Validate
+    Controller ..> Business: Process
 ```
-## Detail
+```mermaid
+sequenceDiagram
+    actor User
+    participant Router
+    participant Middleware
+    participant Controller
+    participant Business
+
+    User ->>+ Router: Request
+    Router ->>+ Middleware: Validate, Log
+    Middleware -->>- Router: OK
+    Router ->>+ Controller: Route
+    Controller ->>+ Business: Process
+    Business -->>- Controller: OK
+    Controller -->>- Router: OK
+    Router ->>+ Middleware: Validate, Log
+    Middleware -->>- Router: OK
+    Router -->>- User: Response
+```
