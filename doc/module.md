@@ -3,6 +3,7 @@
 classDiagram
     class Router {
         <<interface>>
+        + run()
         + route(str path, Controller controller, "method-name")
         + register(Middleware middleware)
     }
@@ -36,7 +37,7 @@ sequenceDiagram
     Router ->>+ Controller: Route
     Controller ->>+ Business: Process
     Business -->>- Controller: OK
-    Controller -->>- Router: OK
+    Controller -->>- Router: OK(Return View Object)
     Router ->>+ Middleware: Validate, Log
     Middleware -->>- Router: OK
     Router -->>- User: Response
