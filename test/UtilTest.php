@@ -29,4 +29,26 @@ class UtilTest extends TestCase
         $this->assertTrue($conn != false);
     }
 
+    public function test_session()
+    {
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
+        $datetime = date("Y-m-d H:i:s");
+        $conn = get_db_conn();
+        $query = <<<QUERY
+SELECT expired_at
+FROM sessions
+WHERE id="test";
+QUERY;
+        $result = mysqli_query($conn, $query);
+        if (mysqli_num_rows($result) == 0) {
+            $this->alert_login();
+        }
+        $row = mysqli_fetch_row($result);
+        $expired_at = $row[0];
+        var_dump($datetime, $expired_at);
+        $this->assertTrue(true);
+        var_dump(strtotime($expired_at));
+        var_dump(strtotime("now"));
+
+    }
 }

@@ -22,7 +22,7 @@ function get_db_conn(): \mysqli
     }
     $database = $config["database"];
     $conn = mysqli_connect(hostname: $database["host"], username: $database["user"],
-        password: $database["password"], port: $database["port"]);
+        password: $database["password"], port: $database["port"], database: $database["db"]);
     if (!$conn) {
         server_error("DB에 연결할 수 없습니다.");
     } else {

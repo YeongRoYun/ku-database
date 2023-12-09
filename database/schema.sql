@@ -1,7 +1,8 @@
 # DROP TABLE IF EXISTS event_images;
 # DROP TABLE IF EXISTS event_image_types;
 # DROP TABLE IF EXISTS events;
-DROP TAbLE IF EXISTS product_brands_product_events;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS product_brands_product_events;
 DROP TAbLE IF EXISTS product_bests_product_events;
 DROP TABLE IF EXISTS product_events;
 DROP TABLE IF EXISTS product_brands;
@@ -45,7 +46,7 @@ CREATE TABLE products
 CREATE TABLE product_bests
 (
     product_id INTEGER UNSIGNED NOT NULL UNIQUE,
-    brand_id INTEGER UNSIGNED NOT NULL,
+    brand_id   INTEGER UNSIGNED NOT NULL,
     price      REAL UNSIGNED    NOT NULL,
     PRIMARY KEY (product_id, brand_id),
     FOREIGN KEY (product_id) REFERENCES products (id),
@@ -89,6 +90,12 @@ CREATE TABLE product_bests_product_events
     FOREIGN KEY (product_id) REFERENCES product_bests (product_id),
     FOREIGN KEY (event_id) REFERENCES product_events (id)
 ) engine = InnoDB;
+
+CREATE TABLE sessions
+(
+    id         CHAR(255) NOT NULL UNIQUE PRIMARY KEY,
+    expired_at DATETIME  NOT NULL
+)
 
 # CREATE TABLE events
 # (
