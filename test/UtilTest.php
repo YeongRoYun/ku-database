@@ -51,4 +51,12 @@ QUERY;
         var_dump(strtotime("now"));
 
     }
+
+    public function test_date() {
+        $now = date_create();
+        $interval = \DateInterval::createFromDateString('30 minutes');
+        $after_10_min = $now->add($interval);
+        var_dump($now, $after_10_min);
+        $this->assertEquals($after_10_min->sub($interval), $now);
+    }
 }

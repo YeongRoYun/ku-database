@@ -18,7 +18,10 @@ class AuthMiddleware implements Middleware
 
     #[\Override] public function intercept_request(): void
     {
-        // TODO: Implement intercept_request() method.
+        $path = explode("?", $_SERVER["REQUEST_URI"])[0];
+        if ($path == "/auth/login") {
+            return;
+        }
         if (!key_exists("session_id", $_COOKIE)) {
             $this->alert_login();
         }
@@ -26,7 +29,7 @@ class AuthMiddleware implements Middleware
         $query = <<<QUERY
 SELECT expired_at
 FROM sessions
-WHERE id={$_COOKIE["session_id"]};
+WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
         $result = mysqli_query($conn, $query);
         if (!$result) {

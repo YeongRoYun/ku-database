@@ -21,3 +21,9 @@ use JetBrains\PhpStorm\NoReturn;
     http_response_code(500);
     die($msg);
 }
+
+#[NoReturn] function bad_request(string $msg): void
+{
+    http_response_code(400);
+    die($msg);
+}

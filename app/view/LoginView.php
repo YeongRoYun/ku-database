@@ -18,7 +18,7 @@ class LoginView implements View
 	<title>Login Page</title>
 </head>
 <body>
-	<form>
+	<form action="/auth/login" method="post">
 		<label for="id">ID:</label><br>
 		<input type="text" id="id" name="id"><br>
 		<label for="password">Password:</label><br>

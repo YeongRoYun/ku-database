@@ -1,1 +1,1 @@
-{"version":1,"defects":{"test\\UtilTest::test_session":8},"times":{"test\\UtilTest::test_get_conn":0.019,"test\\UtilTest::test_date":0.003,"test\\UtilTest::test_session":0.015}}
+{"version":1,"defects":{"test\\UtilTest::test_session":8,"test\\UtilTest::test_date":8},"times":{"test\\UtilTest::test_get_conn":0.019,"test\\UtilTest::test_date":0.003,"test\\UtilTest::test_session":0.015}}
