@@ -32,6 +32,7 @@ class SimpleRouter implements Router
         $has_method = false;
         $controller = null;
         $func = null;
+
         foreach ($this->route_table as $path => $values) {
             foreach ($values as $val) {
                 if ($cur_path == $path) {
