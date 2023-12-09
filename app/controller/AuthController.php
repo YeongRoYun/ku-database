@@ -45,7 +45,7 @@ class AuthController implements Controller
         $expired_at = $now->add($interval);
         $session_id = md5($id . $now->format("Y-m-d H:i:s") . $token);
         $query = <<<QUERY
-INSERT INTO sessions(id, expired_at) VALUES ("$session_id", "{$expired_at->format("Y-m-d H:i:s")}")
+INSERT INTO sessions(id, expired_at) VALUES ("$session_id", "{$expired_at->format("Y-m-d H:i:s")}");
 QUERY;
 
         $result = mysqli_query($conn, $query);

@@ -45,7 +45,6 @@ QUERY;
             $query = <<<QUERY
 DELETE FROM sessions
 WHERE id={$_COOKIE["session_id"]};
-commit;
 QUERY;
             $result = mysqli_query($conn, $query);
             if (!$result) {
@@ -60,7 +59,30 @@ QUERY;
 
     #[\Override] public function intercept_response(View $response): void
     {
-        // TODO: Implement intercept_response() method.
+        // 세션 유지시간 다시 30분
+        if (!key_exists("session_id", $_COOKIE)) {
+            return;
+        }
+        $conn = get_db_conn();
+        $expired_at = date_create();
+        $interval = \DateInterval::createFromDateString('30 minutes');
+        $expired_at = $expired_at->add($interval);
+        $query = <<<QUERY
+UPDATE sessions SET expired_at="{$expired_at->format("Y-m-d H:i:s")}"
+WHERE id="{$_COOKIE["session_id"]}";
+QUERY;
+
+        $result = mysqli_query($conn, $query);
+        if (!$result) {
+            $conn->close();
+            server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
+        }
+        if (!setcookie(name: "session_id", value: $_COOKIE["session_id"],
+            expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
+            $conn->close();
+            server_error("로그인 세션을 쿠키에 할당할 수 없습니다.");
+        }
+        $conn->close();
     }
 
     #[NoReturn] private function alert_login(): void

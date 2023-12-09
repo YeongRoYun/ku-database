@@ -27,9 +27,6 @@ class SimpleRouter implements Router
         }
 
         $cur_path = explode("?", $_SERVER["REQUEST_URI"])[0];
-//        if ($cur_path != "/") {
-//            $cur_path = $_POST["path"];
-//        }
         $cur_method = $_SERVER["REQUEST_METHOD"];
         $has_path = false;
         $has_method = false;
