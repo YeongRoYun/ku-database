@@ -29,3 +29,13 @@ function get_db_conn(): \mysqli
         return $conn;
     }
 }
+
+function safe_mysqli_query(\mysqli $conn, string $query): \mysqli_result|bool
+{
+    $result = mysqli_query($conn, $query);
+    if (!$result) {
+        $conn->close();
+        server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
+    }
+    return $result;
+}

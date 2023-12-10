@@ -12,6 +12,7 @@ use app\view\LoginView;
 use JetBrains\PhpStorm\NoReturn;
 use function app\exception\server_error;
 use function app\util\get_db_conn;
+use function app\util\safe_mysqli_query;
 
 class AuthMiddleware implements Middleware
 {
@@ -31,11 +32,7 @@ SELECT expired_at
 FROM sessions
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
-        $result = mysqli_query($conn, $query);
-        if (!$result) {
-            $conn->close();
-            server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
-        }
+        $result = safe_mysqli_query($conn, $query);
         if (mysqli_num_rows($result) == 0) {
             $conn->close();
             $this->alert_login();
@@ -46,14 +43,9 @@ QUERY;
 DELETE FROM sessions
 WHERE id={$_COOKIE["session_id"]};
 QUERY;
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                $conn->close();
-                server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
-            } else {
-                $conn->close();
-                $this->alert_login();
-            }
+            safe_mysqli_query($conn, $query);
+            $conn->close();
+            $this->alert_login();
         }
     }
 
@@ -71,12 +63,7 @@ QUERY;
 UPDATE sessions SET expired_at="{$expired_at->format("Y-m-d H:i:s")}"
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
-
-        $result = mysqli_query($conn, $query);
-        if (!$result) {
-            $conn->close();
-            server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
-        }
+        safe_mysqli_query($conn, $query);
         if (!setcookie(name: "session_id", value: $_COOKIE["session_id"],
             expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
             $conn->close();

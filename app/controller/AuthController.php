@@ -14,6 +14,7 @@ use function app\exception\bad_request;
 use function app\exception\server_error;
 use function app\util\get_config;
 use function app\util\get_db_conn;
+use function app\util\safe_mysqli_query;
 
 class AuthController implements Controller
 {
@@ -47,19 +48,35 @@ class AuthController implements Controller
         $query = <<<QUERY
 INSERT INTO sessions(id, expired_at) VALUES ("$session_id", "{$expired_at->format("Y-m-d H:i:s")}");
 QUERY;
-
-        $result = mysqli_query($conn, $query);
-        if (!$result) {
-            $conn->close();
-            server_error("Database에서 Query를 실행할 수 없습니다." . "Query: " . $query);
-        }
+        safe_mysqli_query($conn, $query);
 
         if (!setcookie(name: "session_id", value: $session_id,
             expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
             $conn->close();
-            server_error("로그인 세션을 쿠키에 할당할 수 없습니다.");
+            server_error("세션을 쿠키에 할당할 수 없습니다.");
         }
         $conn->close();
+        return new RedirectView("/");
+    }
+
+    public function logout(): View
+    {
+        if (!key_exists("session_id", $_COOKIE)) {
+            return new RedirectView("/");
+        }
+        $session_id = $_COOKIE["session_id"];
+        // Erase sessions
+        $conn = get_db_conn();
+        $query = <<<QUERY
+DELETE FROM sessions
+WHERE id="$session_id";
+QUERY;
+        safe_mysqli_query($conn, $query);
+        // Set cookie
+        if (!setcookie(name: "session_id", value: $session_id, expires_or_options: time() - 3600)) {
+            $conn->close();
+            server_error("세션을 쿠키에 할당할 수 없습니다.");
+        }
         return new RedirectView("/");
     }
 }

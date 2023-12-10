@@ -14,4 +14,5 @@ $router->register(new \app\middleware\LogMiddleware($_SERVER["DOCUMENT_ROOT"] . 
 $router->register(new \app\middleware\AuthMiddleware());
 $router->route("GET", "/", new SimpleController(), "get");
 $router->route("POST", "/auth/login", new \app\controller\AuthController(), "login");
+$router->route("POST", "/auth/logout", new \app\controller\AuthController(), "logout");
 $router->run();
