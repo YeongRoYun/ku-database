@@ -15,4 +15,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+#      initdb.d 의 sql은 알파벳 순서대로 실행된다.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1.schema.sql
+      - ./database/data.sql:/docker-entrypoint-initdb.d/2.data.sql
