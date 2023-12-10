@@ -6,12 +6,12 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Controller.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Middleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
 
+use app\exception\NotAllowHttpException;
+use app\exception\NotFoundHttpException;
 use app\interface\Controller;
 use app\interface\Middleware;
 use app\interface\Router;
 use app\interface\View;
-use function app\exception\not_found;
-use function app\exception\not_allow;
 
 class SimpleRouter implements Router
 {
@@ -19,6 +19,10 @@ class SimpleRouter implements Router
     private array $route_table = array();
 
 
+    /**
+     * @throws NotFoundHttpException
+     * @throws NotAllowHttpException
+     */
     #[\Override] public function run(): void
     {
         /* @var $middleware Middleware */
@@ -49,9 +53,9 @@ class SimpleRouter implements Router
             }
         }
         if (!$has_path) {
-            not_found($cur_path . "은(는) 잘못된 경로입니다.");
+            throw new NotFoundHttpException($cur_path . "은(는) 잘못된 경로입니다.");
         } elseif (!$has_method) {
-            not_allow($cur_method . "은(는) 허용되지 않는 요청입니다.");
+            throw new NotAllowHttpException($cur_method . "은(는) 허용되지 않는 요청입니다.");
         } else {
             /* @var $response View */
             $response = $controller->$func();
