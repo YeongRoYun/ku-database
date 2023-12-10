@@ -39,7 +39,12 @@ class ProductListView implements View
         foreach ($this->data as $row) {
             $row_info = "<tr>";
             foreach ($this->columns as $col) {
-                $row_info = $row_info . "<td>" . $row[$col] . "</td>";
+                if ($col == "image") {
+                    $row_info = $row_info . "<td><img src='$row[$col]' alt='$row[$col]' width='100' height='100'/></td>";
+                } else {
+                    $row_info = $row_info . "<td>" . $row[$col] . "</td>";
+                }
+
             }
             $row_info = $row_info . "</tr>";
             $body = $body . $row_info;
@@ -48,10 +53,10 @@ class ProductListView implements View
         $prv_page = max($this->beg_page, $this->page - 1);
         $nxt_page = min($this->page + 1, $this->end_page);
         $html = <<<HTML
-<!--<table>
+<table>
   $header
   $body
-</table>-->
+</table>
 <div class="pagination">
     <a href="/products?categories=$this->filter&page=$prv_page" class="prev">이전페이지</a>
     <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
