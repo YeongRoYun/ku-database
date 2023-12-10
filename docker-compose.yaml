@@ -18,3 +18,4 @@ services:
 #      initdb.d 의 sql은 알파벳 순서대로 실행된다.
       - ./database/schema.sql:/docker-entrypoint-initdb.d/1.schema.sql
       - ./database/data.sql:/docker-entrypoint-initdb.d/2.data.sql
+      - ./database/sample.sql:/docker-entrypoint-initdb.d/3.sample.sql

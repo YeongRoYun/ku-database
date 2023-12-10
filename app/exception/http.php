@@ -70,7 +70,7 @@ HTML;
         var_dump($exception);
         die($html);
     } else {
-        header("Location: " . "/");
+//        header("Location: " . "/");
         die($html);
     }
 

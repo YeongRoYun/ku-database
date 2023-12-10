@@ -5,6 +5,7 @@ namespace test;
 use PHPUnit\Framework\TestCase;
 use function app\util\getConfig;
 use function app\util\getDbConn;
+use function app\util\safeMysqliQuery;
 
 class UtilTest extends TestCase
 {
@@ -66,5 +67,19 @@ QUERY;
         require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/error.php";
         $this->expectException(\ErrorException::class);
         trigger_error("Some Test Error");
+    }
+
+    public function test_constant_categories()
+    {
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
+        $conn = getDbConn();
+        $constant_categories = safeMysqliQuery($conn, "SELECT id, name FROM categories");
+        $category_map = array();
+        for ($idx = 0; $idx < mysqli_num_rows($constant_categories); $idx += 1) {
+            $row = mysqli_fetch_assoc($constant_categories);
+            $category_map[$row["id"]] = $row["name"];
+        }
+        var_dump($category_map);
+        $this->assertNotEmpty($category_map);
     }
 }
