@@ -15,8 +15,9 @@ class ProductListView implements View
     private int $end_page;
     private array $columns;
     private array $data;
+    private array $categories;
 
-    public function __construct(string $filter, int $page, int $total, int $beg_page, int $end_page, array $columns, array $data)
+    public function __construct(string $filter, int $page, int $total, int $beg_page, int $end_page, array $columns, array $data, array $categories)
     {
         $this->filter = $filter;
         $this->page = $page;
@@ -25,6 +26,7 @@ class ProductListView implements View
         $this->total = $total;
         $this->beg_page = $beg_page;
         $this->end_page = $end_page;
+        $this->categories = $categories;
     }
 
     #[\Override] public function draw(): void
@@ -52,7 +54,52 @@ class ProductListView implements View
         $body = $body . "</tbody>";
         $prv_page = max($this->beg_page, $this->page - 1);
         $nxt_page = min($this->page + 1, $this->end_page);
+
+        // Category Filter
+        $filterForm = "<form method=\"GET\" action=\"/products\">";
+        foreach ($this->categories as $categoryId => $categoryName) {
+            $filterForm = $filterForm . "<input type=\"checkbox\" name=\"category\" value=\"$categoryId\" /> $categoryName <br/>";
+        }
+        $filterForm = $filterForm . "<input type=\"submit\" value=\"Submit\" onclick=\"convertToString()\">";
+        $filterForm = $filterForm . "</form>";
+
         $html = <<<HTML
+<html>
+<head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+<script>
+function convertToString() {
+  const selected = document.querySelectorAll('input[name="category"]:checked');
+  const values = Array.from(selected).map(el => el.value);
+  const result = values.join(",");
+  const hiddenInput = document.createElement("input");
+  hiddenInput.setAttribute("type", "hidden");
+  hiddenInput.setAttribute("name", "categories");
+  hiddenInput.setAttribute("value", result);
+  document.querySelector("form").appendChild(hiddenInput);
+}
+</script>
+</head>
+<body>
+$filterForm
+<p>전체 상품 수: $this->total 페이지: $this->page/$this->end_page</p>
 <table>
   $header
   $body
@@ -62,6 +109,8 @@ class ProductListView implements View
     <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
     <a href="/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
 </div>
+</body>
+</html>
 HTML;
         echo $html;
     }

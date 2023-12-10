@@ -24,7 +24,7 @@ class ProductController implements Controller
     public function getList(): ProductListView
     {
         // GET /products?categories=1,2,3&page=3
-        if (!key_exists("categories", $_GET) || empty($_GET["categories"])) {
+        if (!key_exists("categories", $_GET) || strlen($_GET["categories"]) == 0) {
             $categories = array();
         } else {
             /* @var $categories_query string */
@@ -108,6 +108,6 @@ QUERY;
         } else {
             $view_filter = "";
         }
-        return new ProductListView(filter: $view_filter, page: $page, total: $total_cnt, beg_page: 1, end_page: $total_page, columns: $view_columns, data: $view_data);
+        return new ProductListView(filter: $view_filter, page: $page, total: $total_cnt, beg_page: 1, end_page: $total_page, columns: $view_columns, data: $view_data, categories: $category_map);
     }
 }
