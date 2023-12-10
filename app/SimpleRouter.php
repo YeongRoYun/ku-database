@@ -27,7 +27,7 @@ class SimpleRouter implements Router
     {
         /* @var $middleware Middleware */
         foreach ($this->middlewares as $middleware) {
-            $middleware->intercept_request();
+            $middleware->interceptRequest();
         }
 
         $cur_path = explode("?", $_SERVER["REQUEST_URI"])[0];
@@ -62,7 +62,7 @@ class SimpleRouter implements Router
         }
         /* @var $middleware Middleware */
         foreach ($this->middlewares as $middleware) {
-            $middleware->intercept_response($response);
+            $middleware->interceptResponse($response);
         }
         $response->draw();
     }

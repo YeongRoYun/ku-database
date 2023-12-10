@@ -17,7 +17,7 @@ use function app\util\safe_mysqli_query;
 class AuthMiddleware implements Middleware
 {
 
-    #[\Override] public function intercept_request(): void
+    #[\Override] public function interceptRequest(): void
     {
         $path = explode("?", $_SERVER["REQUEST_URI"])[0];
         if ($path == "/auth/login") {
@@ -52,7 +52,7 @@ QUERY;
     /**
      * @throws HttpException
      */
-    #[\Override] public function intercept_response(View $response): void
+    #[\Override] public function interceptResponse(View $response): void
     {
         // 세션 유지시간 다시 30분
         if (!key_exists("session_id", $_COOKIE)) {
