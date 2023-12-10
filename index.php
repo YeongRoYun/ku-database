@@ -6,6 +6,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/controller/SimpleController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/controller/AuthController.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/error.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/controller/ProductController.php";
 
 use app\SimpleRouter;
 use app\controller\SimpleController;
@@ -13,7 +14,12 @@ use app\controller\SimpleController;
 $router = new SimpleRouter();
 $router->register(new \app\middleware\LogMiddleware($_SERVER["DOCUMENT_ROOT"] . "/app.log"));
 $router->register(new \app\middleware\AuthMiddleware());
-$router->route("GET", "/", new SimpleController(), "get");
-$router->route("POST", "/auth/login", new \app\controller\AuthController(), "login");
-$router->route("POST", "/auth/logout", new \app\controller\AuthController(), "logout");
+
+$authController = new \app\controller\AuthController();
+$productController = new \app\controller\ProductController();
+
+$router->route("POST", "/auth/login", $authController, "login");
+$router->route("POST", "/auth/logout", $authController, "logout");
+$router->route("GET", "/", $productController, "getList");
+$router->route("GET", "/products", $productController, "getList");
 $router->run();
