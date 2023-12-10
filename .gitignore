@@ -182,3 +182,4 @@ $RECYCLE.BIN/
 /vendor/
 
 resource/prod.ini
+*.log

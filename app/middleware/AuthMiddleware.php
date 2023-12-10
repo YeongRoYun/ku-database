@@ -87,6 +87,10 @@ QUERY;
 
     #[NoReturn] private function alert_login(): void
     {
+        // 기존 쿠키 지우기
+        if (key_exists("session_id", $_COOKIE)) {
+            setcookie(name: "session_id", value: $_COOKIE["session_id"], expires_or_options: time() - 3600);
+        }
         $login_view = new LoginView();
         $login_view->draw();
         die("<script>alert('로그인이 필요합니다.')</script>");
