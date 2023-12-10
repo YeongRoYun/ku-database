@@ -12,6 +12,8 @@ VALUES (5, "c-space", "CSpace", "https://image.pyoniverse.kr/brands/cspace-logo.
 
 # categories
 INSERT INTO categories(id, slug, name, description)
+VALUES (0, "invalid", "Invalid", "분류되지 않은 상품");
+INSERT INTO categories(id, slug, name, description)
 VALUES (1, "drink", "Drink", "술을 제외한 음료수");
 INSERT INTO categories(id, slug, name, description)
 VALUES (2, "alcohol", "Alcohol", "술");
@@ -35,3 +37,21 @@ INSERT INTO categories(id, slug, name, description)
 VALUES (11, "food", "Food", "그 외 식품류");
 INSERT INTO categories(id, slug, name, description)
 VALUES (12, "household-goods", "Household Goods", "생활용품");
+
+# product_events
+INSERT INTO product_events(id, slug, name, description)
+VALUES (1, "1+1", "1+1", "동일 상품 하나 더 제공");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (2, "2+1", "2+1", "동일 상품 두 개 구매시 하나 더 제공");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (3, "gift", "GIFT", "덤 증정");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (4, "new", "NEW", "신상품");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (5, "monopoly", "MONOPOLY", "독점 상품");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (6, "reservation", "RESERVATION", "예약이 필요한 상품");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (7, "discount", "DISCOUNT", "할인 상품");
+INSERT INTO product_events(id, slug, name, description)
+VALUES (8, "3+1", "3+1", "동일 상품 세 개 구매시 하나 더 제공");
