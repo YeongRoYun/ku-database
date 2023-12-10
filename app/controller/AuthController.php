@@ -12,9 +12,9 @@ use app\exception\HttpException;
 use app\interface\Controller;
 use app\interface\View;
 use app\view\RedirectView;
-use function app\util\get_config;
-use function app\util\get_db_conn;
-use function app\util\safe_mysqli_query;
+use function app\util\getConfig;
+use function app\util\getDbConn;
+use function app\util\safeMysqliQuery;
 
 class AuthController implements Controller
 {
@@ -31,7 +31,7 @@ class AuthController implements Controller
         if (!$pw) {
             throw new BadRequestHttpException("PW가 입력되지 않았습니다.");
         }
-        $config = get_config();
+        $config = getConfig();
         if (!key_exists("admin", $config)) {
             throw new HttpException("관리자 정보가 없습니다.");
         }
@@ -39,7 +39,7 @@ class AuthController implements Controller
         if ($id != $admin["id"] || $pw != $admin["password"]) {
             throw new BadRequestHttpException("ID 혹은 PW가 일치하지 않습니다.");
         }
-        $conn = get_db_conn();
+        $conn = getDbConn();
         if (!key_exists("secret", $config) || !key_exists("token", $config["secret"])) {
             throw new HttpException("비밀키 정보가 없습니다.");
         }
@@ -51,7 +51,7 @@ class AuthController implements Controller
         $query = <<<QUERY
 INSERT INTO sessions(id, expired_at) VALUES ("$session_id", "{$expired_at->format("Y-m-d H:i:s")}");
 QUERY;
-        safe_mysqli_query($conn, $query);
+        safeMysqliQuery($conn, $query);
 
         if (!setcookie(name: "session_id", value: $session_id,
             expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
@@ -72,12 +72,12 @@ QUERY;
         }
         $session_id = $_COOKIE["session_id"];
         // Erase sessions
-        $conn = get_db_conn();
+        $conn = getDbConn();
         $query = <<<QUERY
 DELETE FROM sessions
 WHERE id="$session_id";
 QUERY;
-        safe_mysqli_query($conn, $query);
+        safeMysqliQuery($conn, $query);
         // Set cookie
         if (!setcookie(name: "session_id", value: $session_id, expires_or_options: time() - 3600)) {
             $conn->close();

@@ -8,7 +8,7 @@ use app\exception\HttpException;
 /**
  * @throws HttpException
  */
-function get_config(): array
+function getConfig(): array
 {
     $config = parse_ini_file($_SERVER["DOCUMENT_ROOT"] . "/resource/dev.ini", true);
     if (!$config) {
@@ -20,9 +20,9 @@ function get_config(): array
 /**
  * @throws HttpException
  */
-function get_db_conn(): \mysqli
+function getDbConn(): \mysqli
 {
-    $config = get_config();
+    $config = getConfig();
     if (!array_key_exists("database", $config)) {
         throw new HttpException("Database 설정을 찾을 수 없습니다.");
     }
@@ -39,7 +39,7 @@ function get_db_conn(): \mysqli
 /**
  * @throws HttpException
  */
-function safe_mysqli_query(\mysqli $conn, string $query): \mysqli_result|bool
+function safeMysqliQuery(\mysqli $conn, string $query): \mysqli_result|bool
 {
     $result = mysqli_query($conn, $query);
     if (!$result) {

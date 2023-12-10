@@ -19,7 +19,7 @@ class SimpleView implements View
     #[\Override] public function draw(): void
     {
         // TODO: Implement draw() method.
-        $logout = logout_button();
+        $logout = logoutButton();
         $html = <<<HTML
 $logout
 <br\>

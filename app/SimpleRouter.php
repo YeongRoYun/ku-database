@@ -16,7 +16,7 @@ use app\interface\View;
 class SimpleRouter implements Router
 {
     private array $middlewares = array();
-    private array $route_table = array();
+    private array $routeTable = array();
 
 
     /**
@@ -37,7 +37,7 @@ class SimpleRouter implements Router
         $controller = null;
         $func = null;
 
-        foreach ($this->route_table as $path => $values) {
+        foreach ($this->routeTable as $path => $values) {
             foreach ($values as $val) {
                 if ($cur_path == $path) {
                     $has_path = true;
@@ -70,10 +70,10 @@ class SimpleRouter implements Router
 
     #[\Override] public function route(string $method, string $path, Controller $controller, string $func): void
     {
-        if (!array_key_exists($path, $this->route_table)) {
-            $this->route_table[$path] = array();
+        if (!array_key_exists($path, $this->routeTable)) {
+            $this->routeTable[$path] = array();
         }
-        $this->route_table[$path][] = array("method" => $method, "controller" => $controller, "func" => $func);
+        $this->routeTable[$path][] = array("method" => $method, "controller" => $controller, "func" => $func);
     }
 
     #[\Override] public function register(Middleware $middleware): void

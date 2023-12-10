@@ -11,8 +11,8 @@ use app\interface\Middleware;
 use app\interface\View;
 use app\view\LoginView;
 use JetBrains\PhpStorm\NoReturn;
-use function app\util\get_db_conn;
-use function app\util\safe_mysqli_query;
+use function app\util\getDbConn;
+use function app\util\safeMysqliQuery;
 
 class AuthMiddleware implements Middleware
 {
@@ -26,13 +26,13 @@ class AuthMiddleware implements Middleware
         if (!key_exists("session_id", $_COOKIE)) {
             $this->alert_login();
         }
-        $conn = get_db_conn();
+        $conn = getDbConn();
         $query = <<<QUERY
 SELECT expired_at
 FROM sessions
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
-        $result = safe_mysqli_query($conn, $query);
+        $result = safeMysqliQuery($conn, $query);
         if (mysqli_num_rows($result) == 0) {
             $conn->close();
             $this->alert_login();
@@ -43,7 +43,7 @@ QUERY;
 DELETE FROM sessions
 WHERE id={$_COOKIE["session_id"]};
 QUERY;
-            safe_mysqli_query($conn, $query);
+            safeMysqliQuery($conn, $query);
             $conn->close();
             $this->alert_login();
         }
@@ -58,7 +58,7 @@ QUERY;
         if (!key_exists("session_id", $_COOKIE)) {
             return;
         }
-        $conn = get_db_conn();
+        $conn = getDbConn();
         $expired_at = date_create();
         $interval = \DateInterval::createFromDateString('30 minutes');
         $expired_at = $expired_at->add($interval);
@@ -66,7 +66,7 @@ QUERY;
 UPDATE sessions SET expired_at="{$expired_at->format("Y-m-d H:i:s")}"
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
-        safe_mysqli_query($conn, $query);
+        safeMysqliQuery($conn, $query);
         if (!setcookie(name: "session_id", value: $_COOKIE["session_id"],
             expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
             $conn->close();

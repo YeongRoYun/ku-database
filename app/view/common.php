@@ -2,7 +2,7 @@
 
 namespace app\view;
 
-function logout_button(): string
+function logoutButton(): string
 {
     $button = <<<HTML
 <form action="/auth/logout" method="post">
