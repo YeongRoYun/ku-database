@@ -3,8 +3,8 @@
 namespace test;
 
 use PHPUnit\Framework\TestCase;
-use function app\util\get_config;
-use function app\util\get_db_conn;
+use function app\util\getConfig;
+use function app\util\getDbConn;
 
 class UtilTest extends TestCase
 {
@@ -18,14 +18,14 @@ class UtilTest extends TestCase
     public function test_get_config()
     {
         require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
-        $config = get_config();
+        $config = getConfig();
         $this->assertTrue($config != false);
     }
 
     public function test_get_conn()
     {
         require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
-        $conn = get_db_conn();
+        $conn = getDbConn();
         $this->assertTrue($conn != false);
     }
 
@@ -33,7 +33,7 @@ class UtilTest extends TestCase
     {
         require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
         $datetime = date("Y-m-d H:i:s");
-        $conn = get_db_conn();
+        $conn = getDbConn();
         $query = <<<QUERY
 SELECT expired_at
 FROM sessions
@@ -52,11 +52,19 @@ QUERY;
 
     }
 
-    public function test_date() {
+    public function test_date()
+    {
         $now = date_create();
         $interval = \DateInterval::createFromDateString('30 minutes');
         $after_10_min = $now->add($interval);
         var_dump($now, $after_10_min);
         $this->assertEquals($after_10_min->sub($interval), $now);
+    }
+
+    public function test_error_handler()
+    {
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/error.php";
+        $this->expectException(\ErrorException::class);
+        trigger_error("Some Test Error");
     }
 }

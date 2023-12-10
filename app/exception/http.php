@@ -4,26 +4,76 @@ namespace app\exception;
 
 use JetBrains\PhpStorm\NoReturn;
 
-
-#[NoReturn] function not_found(string $msg): void
+class HttpException extends \Exception
 {
-    http_response_code(404);
-    die($msg);
+    // Redefine the exception so message isn't optional
+    protected int $httpStatusCode;
+
+    public function __construct(string $message, int $code = 0, \Throwable $previous = null, int $httpStatusCode = 500)
+    {
+        // some code
+        $this->httpStatusCode = $httpStatusCode;
+
+        // make sure everything is assigned properly
+        parent::__construct($message, $code, $previous);
+    }
+
+    // custom string representation of object
+    public function __toString()
+    {
+        return __CLASS__ . ": [{$this->httpStatusCode}]: {$this->message}\n";
+    }
+
+    public function getHttpStatusCode(): int
+    {
+        return $this->httpStatusCode;
+    }
 }
 
-#[NoReturn] function not_allow(string $msg): void
+class NotFoundHttpException extends HttpException
 {
-    http_response_code(405);
-    die($msg);
+    public function __construct(string $message, int $code = 0, \Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous, 404);
+    }
 }
 
-#[NoReturn] function server_error(string $msg): void {
-    http_response_code(500);
-    die($msg);
-}
-
-#[NoReturn] function bad_request(string $msg): void
+class NotAllowHttpException extends HttpException
 {
-    http_response_code(400);
-    die($msg);
+    public function __construct(string $message, int $code = 0, \Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous, 405);
+    }
 }
+
+class BadRequestHttpException extends HttpException
+{
+    public function __construct(string $message, int $code = 0, \Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous, 400);
+    }
+}
+
+function exception_handler(\Throwable $exception): void
+{
+    if (is_subclass_of($exception, '\app\exception\HttpException')) {
+        $status_code = $exception->getHttpStatusCode();
+        $message = $exception->getMessage();
+    } else {
+        $status_code = 500;
+        $message = "예상하지 못한 예외가 발생했습니다.: " . $exception->getMessage();
+    }
+    $html = <<<HTML
+<script>alert("$message")</script>
+HTML;
+    if ($status_code == 500) {
+        var_dump($exception);
+        die($html);
+    } else {
+        header("Location: " . "/");
+        die($html);
+    }
+
+}
+
+set_exception_handler('\app\exception\exception_handler');

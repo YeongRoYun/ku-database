@@ -183,3 +183,4 @@ $RECYCLE.BIN/
 
 resource/prod.ini
 *.log
+*.cache

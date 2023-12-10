@@ -3,6 +3,7 @@
 namespace app\view;
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/common.php";
 
 use app\interface\View;
 
@@ -18,6 +19,12 @@ class SimpleView implements View
     #[\Override] public function draw(): void
     {
         // TODO: Implement draw() method.
-        echo "<h1>" . $this->text . "</h1>";
+        $logout = logoutButton();
+        $html = <<<HTML
+$logout
+<br\>
+<h1>$this->text</h1>
+HTML;
+        echo $html;
     }
 }

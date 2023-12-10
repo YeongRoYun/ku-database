@@ -17,13 +17,13 @@ class LogMiddleware implements Middleware
 
 
 
-    #[\Override] public function intercept_request(): void
+    #[\Override] public function interceptRequest(): void
     {
         // TODO: Implement intercept_request() method.
         error_log("log  request test\n", "3", $this->logfile);
     }
 
-    #[\Override] public function intercept_response(View $response): void
+    #[\Override] public function interceptResponse(View $response): void
     {
         // TODO: Implement intercept_response() method.
         error_log("log response test\n", "3", $this->logfile);
