@@ -52,11 +52,19 @@ QUERY;
 
     }
 
-    public function test_date() {
+    public function test_date()
+    {
         $now = date_create();
         $interval = \DateInterval::createFromDateString('30 minutes');
         $after_10_min = $now->add($interval);
         var_dump($now, $after_10_min);
         $this->assertEquals($after_10_min->sub($interval), $now);
+    }
+
+    public function test_error_handler()
+    {
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/error.php";
+        $this->expectException(\ErrorException::class);
+        trigger_error("Some Test Error");
     }
 }
