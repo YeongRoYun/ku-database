@@ -53,17 +53,17 @@ class ProductController implements Controller
         if (!empty($categories)) {
             $categories_cond = "(" . implode(",", $categories) . ")";
             $query = <<<QUERY
-SELECT id, category_id, name, description, image, price, good_count, view_count
-FROM products
-WHERE category_id IN $categories_cond
-ORDER BY id ASC
+SELECT products.id, products.name, products.description, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
+FROM products JOIN categories ON (products.category_id = categories.id)
+WHERE categories.id IN $categories_cond
+ORDER BY products.id ASC
 
 QUERY;
         } else {
             $query = <<<QUERY
-SELECT id, category_id, name, description, image, price, good_count, view_count
-FROM products
-ORDER BY id ASC
+SELECT products.id, products.name, products.description, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
+FROM products JOIN categories ON (products.category_id = categories.id)
+ORDER BY products.id ASC
 QUERY;
         }
         if ($skip > 0) {
@@ -99,7 +99,7 @@ QUERY;
         $view_data = array();
         for ($idx = 0; $idx < mysqli_num_rows($result); $idx += 1) {
             $row = mysqli_fetch_assoc($result);
-            $view_data[] = array("id" => $row["id"], "image" => $row["image"], "category" => $category_map[$row["category_id"]],
+            $view_data[] = array("id" => $row["id"], "image" => $row["image"], "category" => $row["category_name"],
                 "name" => $row["name"], "price" => $row["price"], "good_count" => $row["good_count"],
                 "view_count" => $row["view_count"], "description" => $row["description"]);
         }
