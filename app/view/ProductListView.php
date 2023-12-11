@@ -39,7 +39,7 @@ class ProductListView implements View
         /* @var $col string */
         $body = "<tbody>";
         foreach ($this->data as $row) {
-            $row_info = "<tr>";
+            $row_info = "<tr onclick=\"window.location.href='/products/{$row["id"]}'\">";
             foreach ($this->columns as $col) {
                 if ($col == "image") {
                     $row_info = $row_info . "<td><img src='$row[$col]' alt='$row[$col]' width='100' height='100'/></td>";
