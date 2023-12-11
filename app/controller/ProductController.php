@@ -53,7 +53,7 @@ class ProductController implements Controller
         if (!empty($categories)) {
             $categories_cond = "(" . implode(",", $categories) . ")";
             $query = <<<QUERY
-SELECT products.id, products.name, products.description, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
+SELECT products.id, products.name, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
 FROM products JOIN categories ON (products.category_id = categories.id)
 WHERE categories.id IN $categories_cond
 ORDER BY products.id ASC
@@ -61,7 +61,7 @@ ORDER BY products.id ASC
 QUERY;
         } else {
             $query = <<<QUERY
-SELECT products.id, products.name, products.description, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
+SELECT products.id, products.name, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
 FROM products JOIN categories ON (products.category_id = categories.id)
 ORDER BY products.id ASC
 QUERY;
@@ -89,7 +89,7 @@ QUERY;
         $total_page = ceil($total_cnt / $page_size);
 
         // Convert data
-        $view_columns = array("id", "image", "category", "name", "price", "good_count", "view_count", "description");
+        $view_columns = array("id", "image", "category", "name", "price", "good_count", "view_count");
         $constant_categories = safeMysqliQuery($conn, "SELECT id, name FROM categories");
         $category_map = array();
         for ($idx = 0; $idx < mysqli_num_rows($constant_categories); $idx += 1) {
@@ -101,7 +101,7 @@ QUERY;
             $row = mysqli_fetch_assoc($result);
             $view_data[] = array("id" => $row["id"], "image" => $row["image"], "category" => $row["category_name"],
                 "name" => $row["name"], "price" => $row["price"], "good_count" => $row["good_count"],
-                "view_count" => $row["view_count"], "description" => $row["description"]);
+                "view_count" => $row["view_count"]);
         }
         if (!empty($categories)) {
             $view_filter = implode(",", $categories);
