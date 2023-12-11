@@ -1,6 +1,7 @@
 <?php
 
 namespace app\view;
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/common.php";
 
 use app\interface\View;
 
@@ -31,15 +32,14 @@ class ProductListView implements View
 
     #[\Override] public function draw(): void
     {
-//        $arr_size = count($this->data);
-//        var_dump($arr_size);
+        $logout = logoutButton();
         $columns = array_map(function(string $col): string {return "<th>".$col."</th>";}, $this->columns);
         $header = array_reduce($columns, function(string $acc, string $cur): string {return $acc.$cur;}, "");
         $header = "<thead><tr>".$header."</tr></thead>";
         /* @var $col string */
         $body = "<tbody>";
         foreach ($this->data as $row) {
-            $row_info = "<tr>";
+            $row_info = "<tr onclick=\"window.location.href='/products/{$row["id"]}'\">";
             foreach ($this->columns as $col) {
                 if ($col == "image") {
                     $row_info = $row_info . "<td><img src='$row[$col]' alt='$row[$col]' width='100' height='100'/></td>";
@@ -56,7 +56,7 @@ class ProductListView implements View
         $nxt_page = min($this->page + 1, $this->end_page);
 
         // Category Filter
-        $filterForm = "<form method=\"GET\" action=\"/products\">";
+        $filterForm = "<form id='filter-form' method=\"GET\" action=\"/products\">";
         foreach ($this->categories as $categoryId => $categoryName) {
             $filterForm = $filterForm . "<input type=\"checkbox\" name=\"category\" value=\"$categoryId\" /> $categoryName <br/>";
         }
@@ -93,11 +93,12 @@ function convertToString() {
   hiddenInput.setAttribute("type", "hidden");
   hiddenInput.setAttribute("name", "categories");
   hiddenInput.setAttribute("value", result);
-  document.querySelector("form").appendChild(hiddenInput);
+  document.querySelector("#filter-form").appendChild(hiddenInput);
 }
 </script>
 </head>
 <body>
+$logout
 $filterForm
 <p>전체 상품 수: $this->total 페이지: $this->page/$this->end_page</p>
 <table>

@@ -82,4 +82,28 @@ QUERY;
         var_dump($category_map);
         $this->assertNotEmpty($category_map);
     }
+
+    public function test_parse_path_variable()
+    {
+        $url = "/products/1";
+        $urlPattern = "/products/{id}";
+        $urlChunks = explode("/", trim(trim($url), "/"));
+        $urlPatternChunks = explode("/", trim(trim($urlPattern), "/"));
+        $this->assertEquals(count($urlChunks), 2);
+        $varRegex = "/^\{(.+)}$/i";
+        $pathVariables = array();
+        for ($idx = 0; $idx < count($urlChunks); ++$idx) {
+            $urlChunk = $urlChunks[$idx];
+            $urlPatternChunk = $urlPatternChunks[$idx];
+            if (preg_match($varRegex, $urlPatternChunk, $matches)) {
+                $varName = $matches[1];
+                $var = $urlChunk;
+                $pathVariables[$varName] = $var;
+            } elseif ($urlChunk != $urlPatternChunk) {
+                break;
+            }
+        }
+        $this->assertTrue(key_exists("id", $pathVariables));
+        $this->assertEquals("1", $pathVariables["id"]);
+    }
 }
