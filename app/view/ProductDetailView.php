@@ -75,8 +75,7 @@ class ProductDetailView implements View
                     <tr>
                         <th>편의점</th>
                         <th>행사정보</th>
-                        <th>가격</th>
-                        <th>행사가격</th>
+                        <th>최저가격</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,7 +83,6 @@ class ProductDetailView implements View
                         <td>{$this->data["best"]["brand_name"]}</td>
                         <td>{$this->data["best"]["events"]}</td>
                         <td>{$this->data["best"]["price"]}</td>
-                        <td>{$this->data["best"]["event_price"]}</td>
                     </tr>
                 </tbody>
             </table>

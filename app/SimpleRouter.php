@@ -30,32 +30,34 @@ class SimpleRouter implements Router
             $middleware->interceptRequest();
         }
 
-        $cur_path = explode("?", $_SERVER["REQUEST_URI"])[0];
-        $cur_method = $_SERVER["REQUEST_METHOD"];
-        $has_path = false;
-        $has_method = false;
+        $curPath = explode("?", $_SERVER["REQUEST_URI"])[0];
+        $curMethod = $_SERVER["REQUEST_METHOD"];
+        $hasPath = false;
+        $hasMethod = false;
         $controller = null;
         $func = null;
-
-        foreach ($this->routeTable as $path => $values) {
-            foreach ($values as $val) {
-                if ($cur_path == $path) {
-                    $has_path = true;
-                    if ($cur_method == $val["method"]) {
-                        $has_method = true;
+        $pathVariables = array();
+        foreach ($this->routeTable as $pathPattern => $values) {
+            if ($this->checkPath($curPath, $pathPattern, $pathVariables)) {
+                $hasPath = true;
+                foreach ($values as $val) {
+                    if ($curMethod == $val["method"]) {
+                        $hasMethod = true;
                         $controller = $val["controller"];
                         $func = $val["func"];
                     }
                 }
             }
-            if ($has_path && $has_method) {
+            if ($hasPath && $hasMethod) {
                 break;
             }
+            $pathVariables = array();
         }
-        if (!$has_path) {
-            throw new NotFoundHttpException($cur_path . "은(는) 잘못된 경로입니다.");
-        } elseif (!$has_method) {
-            throw new NotAllowHttpException($cur_method . "은(는) 허용되지 않는 요청입니다.");
+        $_REQUEST["PATH_VARIABLES"] = $pathVariables;
+        if (!$hasPath) {
+            throw new NotFoundHttpException($curPath . "은(는) 잘못된 경로입니다.");
+        } elseif (!$hasMethod) {
+            throw new NotAllowHttpException($curMethod . "은(는) 허용되지 않는 요청입니다.");
         } else {
             /* @var $response View */
             $response = $controller->$func();
@@ -79,5 +81,36 @@ class SimpleRouter implements Router
     #[\Override] public function register(Middleware $middleware): void
     {
         $this->middlewares[] = $middleware;
+    }
+
+    private function checkPath($path, $pathPattern, &$pathVariables): bool {
+        $pathChunks = explode("/", trim(trim($path), "/"));
+        $pathPatternChunks = explode("/", trim(trim($pathPattern), "/"));
+        if (count($pathChunks) != count($pathPatternChunks)) {
+            return false;
+        }
+        $res = true;
+        for ($idx = 0; $idx < count($pathChunks); ++$idx) {
+            $pathChunk = $pathChunks[$idx];
+            $pathPatternChunk = $pathPatternChunks[$idx];
+            $res = $this->checkPathChunk($pathChunk, $pathPatternChunk, $pathVariables);
+            if (!$res) {
+                break;
+            }
+        }
+        return $res;
+    }
+
+    private function checkPathChunk($pathChunk, $pathPatternChunk, &$pathVariables): bool {
+        $varRegex = "/^\{(.+)}$/i";
+        $res = true;
+        if (preg_match($varRegex, $pathPatternChunk, $matches)) {
+            $varName = $matches[1];
+            $var = $pathChunk;
+            $pathVariables[$varName] = $var;
+        } elseif ($pathChunk != $pathPatternChunk) {
+            $res = false;
+        }
+        return $res;
     }
 }
