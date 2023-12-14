@@ -17,6 +17,9 @@ use function app\util\safeMysqliQuery;
 class AuthMiddleware implements Middleware
 {
 
+    /**
+     * @throws HttpException
+     */
     #[\Override] public function interceptRequest(): void
     {
         $path = explode("?", $_SERVER["REQUEST_URI"])[0];
@@ -24,7 +27,7 @@ class AuthMiddleware implements Middleware
             return;
         }
         if (!key_exists("session_id", $_COOKIE)) {
-            $this->alert_login();
+            $this->alertLogin();
         }
         $conn = getDbConn();
         $query = <<<QUERY
@@ -35,17 +38,17 @@ QUERY;
         $result = safeMysqliQuery($conn, $query);
         if (mysqli_num_rows($result) == 0) {
             $conn->close();
-            $this->alert_login();
+            $this->alertLogin();
         }
-        $expired_at = mysqli_fetch_row($result)[0];
-        if (strtotime($expired_at) <= strtotime("now")) {
+        $expiredAt = mysqli_fetch_row($result)[0];
+        if (strtotime($expiredAt) <= strtotime("now")) {
             $query = <<<QUERY
 DELETE FROM sessions
 WHERE id={$_COOKIE["session_id"]};
 QUERY;
             safeMysqliQuery($conn, $query);
             $conn->close();
-            $this->alert_login();
+            $this->alertLogin();
         }
     }
 
@@ -59,30 +62,30 @@ QUERY;
             return;
         }
         $conn = getDbConn();
-        $expired_at = date_create();
+        $expiredAt = date_create();
         $interval = \DateInterval::createFromDateString('30 minutes');
-        $expired_at = $expired_at->add($interval);
+        $expiredAt = $expiredAt->add($interval);
         $query = <<<QUERY
-UPDATE sessions SET expired_at="{$expired_at->format("Y-m-d H:i:s")}"
+UPDATE sessions SET expired_at="{$expiredAt->format("Y-m-d H:i:s")}"
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
         safeMysqliQuery($conn, $query);
         if (!setcookie(name: "session_id", value: $_COOKIE["session_id"],
-            expires_or_options: $expired_at->getTimestamp(), path: "/", httponly: true)) {
+            expires_or_options: $expiredAt->getTimestamp(), path: "/", httponly: true)) {
             $conn->close();
             throw new HttpException("로그인 세션을 쿠키에 할당할 수 없습니다.");
         }
         $conn->close();
     }
 
-    #[NoReturn] private function alert_login(): void
+    #[NoReturn] private function alertLogin(): void
     {
         // 기존 쿠키 지우기
         if (key_exists("session_id", $_COOKIE)) {
             setcookie(name: "session_id", value: $_COOKIE["session_id"], expires_or_options: time() - 3600);
         }
-        $login_view = new LoginView();
-        $login_view->draw();
+        $loginView = new LoginView();
+        $loginView->draw();
         die("<script>alert('로그인이 필요합니다.')</script>");
     }
 }
