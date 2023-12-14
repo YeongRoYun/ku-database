@@ -157,4 +157,20 @@ QUERY;
         $conn->close();
         return $product;
     }
+
+    /**
+     * @throws HttpException
+     */
+    public function getMutableAttributes(): array
+    {
+        $conn = getDbConn();
+        $mutableAttributes = array("categories" => array());
+        $queryResult = safeMysqliQuery($conn, "SELECT id, name FROM categories");
+        for ($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
+            $row = mysqli_fetch_assoc($queryResult);
+            $mutableAttributes["categories"][$row["id"]] = $row["name"];
+        }
+        $conn->close();
+        return $mutableAttributes;
+    }
 }
