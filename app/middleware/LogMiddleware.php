@@ -19,13 +19,19 @@ class LogMiddleware implements Middleware
 
     #[\Override] public function interceptRequest(): void
     {
-        // TODO: Implement intercept_request() method.
-        error_log("log  request test\n", "3", $this->logfile);
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestUrl = $_SERVER["REQUEST_URI"];
+        $timestamp = date_create()->format("Y-m-dTH:i:s");
+        $log = "[$timestamp] Request: [$requestMethod] [$requestUrl]\n";
+        error_log($log, "3", $this->logfile);
     }
 
     #[\Override] public function interceptResponse(View $response): void
     {
-        // TODO: Implement intercept_response() method.
-        error_log("log response test\n", "3", $this->logfile);
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+        $requestUrl = $_SERVER["REQUEST_URI"];
+        $timestamp = date_create()->format("Y-m-dTH:i:s");
+        $log = "[$timestamp] Response: [$requestMethod] [$requestUrl]\n";
+        error_log($log, "3", $this->logfile);
     }
 }
