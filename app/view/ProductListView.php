@@ -76,6 +76,9 @@ th {
   background-color: #4CAF50;
   color: white;
 }
+.pagination {
+    margin 0 auto;
+}
 STYLE;
         $script = <<<SCRIPT
 function convertToString() {
@@ -90,16 +93,18 @@ function convertToString() {
 }
 SCRIPT;
         $body = <<<BODY
-$filterForm
-<p>전체 상품 수: $this->total 페이지: $this->page/$this->end_page</p>
-<table>
-  $header
-  $body
-</table>
-<div class="pagination">
-    <a href="/products?categories=$this->filter&page=$prv_page" class="prev">이전페이지</a>
-    <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
-    <a href="/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
+<div>
+    $filterForm
+    <p>전체 상품 수: $this->total 페이지: $this->page/$this->end_page</p>
+    <table>
+        $header
+        $body
+    </table>
+    <nav class="pagination">
+        <a href="/products?categories=$this->filter&page=$prv_page" class="prev">이전페이지</a>
+        <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
+        <a href="/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
+    </nav>
 </div>
 BODY;
         echo $this->makeHtml(style: $style, script: $script, body: $body);
