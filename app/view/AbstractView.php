@@ -7,7 +7,7 @@ use app\interface\View;
 
 abstract class AbstractView implements View
 {
-    protected function makeHtml(string $style = "", string $js = "", string $body = ""): string {
+    protected function makeHtml(string $style = "", string $script = "", string $body = ""): string {
         $html = <<<HTML
 <head lang="ko">
     <title>Pyoniverse Dashboard</title>
@@ -15,7 +15,7 @@ abstract class AbstractView implements View
         $style
     </style>
     <script>
-        $js
+        $script
     </script>
 </head>
 <body>

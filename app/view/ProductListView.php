@@ -1,13 +1,9 @@
 <?php
 
 namespace app\view;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/common.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
-use app\interface\View;
-
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
-
-class ProductListView implements View
+class ProductListView extends AbstractView
 {
     private string $filter;
     private int $page;
@@ -18,7 +14,8 @@ class ProductListView implements View
     private array $data;
     private array $categories;
 
-    public function __construct(string $filter, int $page, int $total, int $beg_page, int $end_page, array $columns, array $data, array $categories)
+    public function __construct(string $filter, int $page, int $total, int $beg_page, int $end_page,
+                                array $columns, array $data, array $categories)
     {
         $this->filter = $filter;
         $this->page = $page;
@@ -32,7 +29,6 @@ class ProductListView implements View
 
     #[\Override] public function draw(): void
     {
-        $logout = logoutButton();
         $columns = array_map(function(string $col): string {return "<th>".$col."</th>";}, $this->columns);
         $header = array_reduce($columns, function(string $acc, string $cur): string {return $acc.$cur;}, "");
         $header = "<thead><tr>".$header."</tr></thead>";
@@ -63,10 +59,7 @@ class ProductListView implements View
         $filterForm = $filterForm . "<input type=\"submit\" value=\"Submit\" onclick=\"convertToString()\">";
         $filterForm = $filterForm . "</form>";
 
-        $html = <<<HTML
-<html>
-<head>
-<style>
+        $style = <<<STYLE
 table {
   border-collapse: collapse;
   width: 100%;
@@ -83,8 +76,8 @@ th {
   background-color: #4CAF50;
   color: white;
 }
-</style>
-<script>
+STYLE;
+        $script = <<<SCRIPT
 function convertToString() {
   const selected = document.querySelectorAll('input[name="category"]:checked');
   const values = Array.from(selected).map(el => el.value);
@@ -95,10 +88,8 @@ function convertToString() {
   hiddenInput.setAttribute("value", result);
   document.querySelector("#filter-form").appendChild(hiddenInput);
 }
-</script>
-</head>
-<body>
-$logout
+SCRIPT;
+        $body = <<<BODY
 $filterForm
 <p>전체 상품 수: $this->total 페이지: $this->page/$this->end_page</p>
 <table>
@@ -110,9 +101,7 @@ $filterForm
     <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
     <a href="/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
 </div>
-</body>
-</html>
-HTML;
-        echo $html;
+BODY;
+        echo $this->makeHtml(style: $style, script: $script, body: $body);
     }
 }
