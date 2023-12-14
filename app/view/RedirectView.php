@@ -1,19 +1,20 @@
 <?php
 
 namespace app\view;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
-use app\interface\View;
 
-class RedirectView implements View
+class RedirectView extends AbstractView
 {
     private string $path;
-    public function __construct(string $path) {
+
+    public function __construct(string $path)
+    {
         $this->path = $path;
     }
 
     #[\Override] public function draw(): void
     {
-        header( "Location: " . $this->path );
+        header("Location: " . $this->path);
     }
 }
