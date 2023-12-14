@@ -46,4 +46,16 @@ QUERY;
         $conn->close();
         return array("sessionId" => $sessionId, "expiredAt" => $expiredAt);
     }
+
+    public function logout(string $sessionId): void
+    {
+        // Erase sessions
+        $conn = getDbConn();
+        $query = <<<QUERY
+DELETE FROM sessions
+WHERE id="$sessionId";
+QUERY;
+        safeMysqliQuery($conn, $query);
+        $conn->close();
+    }
 }

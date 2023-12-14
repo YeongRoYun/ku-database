@@ -60,17 +60,10 @@ class AuthController implements Controller
         if (!key_exists("session_id", $_COOKIE)) {
             return new RedirectView("/");
         }
-        $session_id = $_COOKIE["session_id"];
-        // Erase sessions
-        $conn = getDbConn();
-        $query = <<<QUERY
-DELETE FROM sessions
-WHERE id="$session_id";
-QUERY;
-        safeMysqliQuery($conn, $query);
+        $sessionId = $_COOKIE["session_id"];
+        $this->authBusiness->logout(sessionId: $sessionId);
         // Set cookie
-        if (!setcookie(name: "session_id", value: $session_id, expires_or_options: time() - 3600)) {
-            $conn->close();
+        if (!setcookie(name: "session_id", value: $sessionId, expires_or_options: time() - 3600)) {
             throw new HttpException("세션을 쿠키에 할당할 수 없습니다.");
         }
         return new RedirectView("/");
