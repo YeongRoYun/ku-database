@@ -23,4 +23,6 @@ $router->route("POST", "/auth/logout", $authController, "logout");
 $router->route("GET", "/", $productController, "getList");
 $router->route("GET", "/products", $productController, "getList");
 $router->route("GET", "/products/{id}", $productController, "getDetail");
+$router->route("GET", "/products/mutable/{id}", $productController, "getMutable");
+$router->route("POST", "/products/{id}", $productController, "updateAttributes");
 $router->run();
