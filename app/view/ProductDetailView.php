@@ -35,7 +35,6 @@ class ProductDetailView implements View
           border: 1px solid black;
           border-collapse: collapse;
         }
-
     </style>
 </head>
 <body>
@@ -44,6 +43,9 @@ class ProductDetailView implements View
     <div style="text-align: center;">
         <img src="{$this->data["image"]}" alt="{$this->data["name"]}"/>
     </div>
+    <p>
+        <button onclick="location.href='/products/mutable/{$this->data["id"]}'">수정하기</button>
+    </p>
     <div>
         <h2>설명</h2>
         <p>{$this->data["description"]}</p>
