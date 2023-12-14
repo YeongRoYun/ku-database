@@ -14,16 +14,16 @@ class ProductListView extends AbstractView
     private array $data;
     private array $categories;
 
-    public function __construct(string $filter, int $page, int $total, int $beg_page, int $end_page,
-                                array $columns, array $data, array $categories)
+    public function __construct(string $filter, int $page, int $total, int $begPage, int $endPage,
+                                array  $columns, array $data, array $categories)
     {
         $this->filter = $filter;
         $this->page = $page;
         $this->columns = $columns;
         $this->data = $data;
         $this->total = $total;
-        $this->beg_page = $beg_page;
-        $this->end_page = $end_page;
+        $this->beg_page = $begPage;
+        $this->end_page = $endPage;
         $this->categories = $categories;
     }
 

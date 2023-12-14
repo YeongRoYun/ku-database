@@ -6,9 +6,10 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductListView.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductDetailView.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductMutableView.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/business/ProductBusiness.php";
 
+use app\business\ProductBusiness;
 use app\exception\BadRequestHttpException;
 use app\exception\HttpException;
 use app\exception\NotFoundHttpException;
@@ -22,6 +23,13 @@ use function app\util\safeMysqliQuery;
 
 class ProductController implements Controller
 {
+    private ProductBusiness $productBusiness;
+
+    public function __construct()
+    {
+        $this->productBusiness = new ProductBusiness();
+    }
+
     /**
      * @throws BadRequestHttpException
      * @throws HttpException
@@ -53,68 +61,10 @@ class ProductController implements Controller
         } else {
             $page = intval($page);
         }
-        // Find products
-        $page_size = 50;
-        $skip = $page_size * ($page - 1);
-        if (!empty($categories)) {
-            $categories_cond = "(" . implode(",", $categories) . ")";
-            $query = <<<QUERY
-SELECT products.id, products.name, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
-FROM products JOIN categories ON (products.category_id = categories.id)
-WHERE categories.id IN $categories_cond
-ORDER BY products.id ASC
-
-QUERY;
-        } else {
-            $query = <<<QUERY
-SELECT products.id, products.name, products.image, products.price, products.good_count, products.view_count, categories.name AS category_name
-FROM products JOIN categories ON (products.category_id = categories.id)
-ORDER BY products.id ASC
-QUERY;
-        }
-        if ($skip > 0) {
-            $query = $query . " LIMIT $page_size OFFSET $skip;";
-        } else {
-            $query = $query . " LIMIT $page_size;";
-        }
-
-        $conn = getDbConn();
-        $result = safeMysqliQuery($conn, $query);
-        // Check data
-        if (mysqli_num_rows($result) == 0) {
-            throw new NotFoundHttpException("categories IN $categories_cond, page=$page, page_size=$page_size 에 일치하는 데이터가 없습니다.");
-        }
-        // Find meta data
-        if (!empty($categories)) {
-            $categories_cond = "(" . implode(",", $categories) . ")";
-            $total_products = safeMysqliQuery($conn, "SELECT COUNT(*) FROM products WHERE category_id IN $categories_cond");
-        } else {
-            $total_products = safeMysqliQuery($conn, "SELECT COUNT(*) FROM products");
-        }
-        $total_cnt = mysqli_fetch_array($total_products)[0];
-        $total_page = ceil($total_cnt / $page_size);
-
-        // Convert data
-        $view_columns = array("id", "image", "category", "name", "price", "good_count", "view_count");
-        $constant_categories = safeMysqliQuery($conn, "SELECT id, name FROM categories");
-        $category_map = array();
-        for ($idx = 0; $idx < mysqli_num_rows($constant_categories); $idx += 1) {
-            $row = mysqli_fetch_assoc($constant_categories);
-            $category_map[$row["id"]] = $row["name"];
-        }
-        $view_data = array();
-        for ($idx = 0; $idx < mysqli_num_rows($result); $idx += 1) {
-            $row = mysqli_fetch_assoc($result);
-            $view_data[] = array("id" => $row["id"], "image" => $row["image"], "category" => $row["category_name"],
-                "name" => $row["name"], "price" => $row["price"], "good_count" => $row["good_count"],
-                "view_count" => $row["view_count"]);
-        }
-        if (!empty($categories)) {
-            $view_filter = implode(",", $categories);
-        } else {
-            $view_filter = "";
-        }
-        return new ProductListView(filter: $view_filter, page: $page, total: $total_cnt, beg_page: 1, end_page: $total_page, columns: $view_columns, data: $view_data, categories: $category_map);
+        $res = $this->productBusiness->getList(categories: $categories, page: $page);
+        return new ProductListView(filter: $res["filter"], page: $res["page"], total: $res["total"],
+            begPage: $res["begPage"], endPage: $res["endPage"], columns: $res["columns"], data: $res["data"],
+            categories: $res["categories"]);
     }
 
     /**
