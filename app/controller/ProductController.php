@@ -16,6 +16,7 @@ use app\interface\Controller;
 use app\view\ProductDetailView;
 use app\view\ProductListView;
 use app\view\ProductMutableView;
+use app\view\RedirectView;
 use function app\util\getDbConn;
 use function app\util\safeMysqliQuery;
 
@@ -121,7 +122,8 @@ QUERY;
      * @throws NotFoundHttpException
      * @throws HttpException
      */
-    public function getDetail(): ProductDetailView {
+    public function getDetail(): ProductDetailView
+    {
         // 1. get id
         $productId = $_REQUEST["PATH_VARIABLES"]["id"];
         if (!preg_match("/\d+/i", $productId)) {
@@ -177,7 +179,7 @@ QUERY;
             throw new HttpException("편의점 정보가 없습니다. DB를 확인하세요: ID=$productId");
         }
         $brands = array();
-        for($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
+        for ($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
             $brands[] = mysqli_fetch_assoc($queryResult);
         }
         // 4. 조합
@@ -189,7 +191,8 @@ QUERY;
         return $view;
     }
 
-    public function getMutable(): ProductMutableView {
+    public function getMutable(): ProductMutableView
+    {
         // 1. get id
         $productId = $_REQUEST["PATH_VARIABLES"]["id"];
         if (!preg_match("/\d+/i", $productId)) {
@@ -245,7 +248,7 @@ QUERY;
             throw new HttpException("편의점 정보가 없습니다. DB를 확인하세요: ID=$productId");
         }
         $brands = array();
-        for($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
+        for ($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
             $brands[] = mysqli_fetch_assoc($queryResult);
         }
         // 4. 조합
@@ -254,7 +257,7 @@ QUERY;
         $product["id"] = $productId;
 
         // 5. 수정 사능한 속성 정보
-        $mutableAttributes = array("categories"=>array());
+        $mutableAttributes = array("categories" => array());
         $queryResult = safeMysqliQuery($conn, "SELECT id, name FROM categories");
         for ($idx = 0; $idx < mysqli_num_rows($queryResult); ++$idx) {
             $row = mysqli_fetch_assoc($queryResult);
@@ -264,5 +267,23 @@ QUERY;
         $view = new \app\view\ProductMutableView(data: $product, mutableAttributes: $mutableAttributes);
         $conn->close();
         return $view;
+    }
+
+    public function updateAttributes(): RedirectView
+    {
+        $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        $updatedAttributes = array();
+        if (key_exists("category", $_POST)) {
+            $updatedAttributes["category"] = $_POST["category"];
+        }
+        // update
+        $conn = getDbConn();
+        safeMysqliQuery($conn, "SET autocommit=0;");
+        safeMysqliQuery($conn, "SET session TRANSACTION ISOLATION LEVEL serializable;");
+        safeMysqliQuery($conn, "begin;");
+        safeMysqliQuery($conn, "UPDATE products SET category_id={$updatedAttributes["category"]} WHERE id=$productId");
+        safeMysqliQuery($conn, "commit");
+        $conn->close();
+        return new RedirectView("/products/$productId");
     }
 }

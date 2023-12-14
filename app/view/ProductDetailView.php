@@ -44,7 +44,7 @@ class ProductDetailView implements View
         <img src="{$this->data["image"]}" alt="{$this->data["name"]}"/>
     </div>
     <p>
-        <button onclick="location.href='/products/mutable/{$this->data["id"]}'">수정하기</button>
+        <button onclick="location.href='/products/mutable/{$this->data["id"]}'">수정페이지이동</button>
     </p>
     <div>
         <h2>설명</h2>
