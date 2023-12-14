@@ -173,4 +173,18 @@ QUERY;
         $conn->close();
         return $mutableAttributes;
     }
+
+    /**
+     * @throws HttpException
+     */
+    public function updateAttributes(int $id, array $updatedAttributes): void
+    {
+        $conn = getDbConn();
+        safeMysqliQuery($conn, "SET autocommit=0;");
+        safeMysqliQuery($conn, "SET session TRANSACTION ISOLATION LEVEL serializable;");
+        safeMysqliQuery($conn, "begin;");
+        safeMysqliQuery($conn, "UPDATE products SET category_id={$updatedAttributes["category"]} WHERE id=$id");
+        safeMysqliQuery($conn, "commit");
+        $conn->close();
+    }
 }

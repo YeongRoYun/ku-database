@@ -106,6 +106,9 @@ class ProductController implements Controller
         return new \app\view\ProductMutableView(data: $product, mutableAttributes: $mutableAttributes);
     }
 
+    /**
+     * @throws HttpException
+     */
     public function updateAttributes(): RedirectView
     {
         $productId = $_REQUEST["PATH_VARIABLES"]["id"];
@@ -114,13 +117,7 @@ class ProductController implements Controller
             $updatedAttributes["category"] = $_POST["category"];
         }
         // update
-        $conn = getDbConn();
-        safeMysqliQuery($conn, "SET autocommit=0;");
-        safeMysqliQuery($conn, "SET session TRANSACTION ISOLATION LEVEL serializable;");
-        safeMysqliQuery($conn, "begin;");
-        safeMysqliQuery($conn, "UPDATE products SET category_id={$updatedAttributes["category"]} WHERE id=$productId");
-        safeMysqliQuery($conn, "commit");
-        $conn->close();
+        $this->productBusiness->updateAttributes(id: $productId, updatedAttributes: $updatedAttributes);
         return new RedirectView("/products/$productId");
     }
 }
