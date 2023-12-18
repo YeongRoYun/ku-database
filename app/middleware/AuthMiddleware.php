@@ -10,7 +10,6 @@ use app\exception\HttpException;
 use app\ifs\Middleware;
 use app\ifs\View;
 use app\view\LoginView;
-use JetBrains\PhpStorm\NoReturn;
 use function app\util\getDbConn;
 use function app\util\safeMysqliQuery;
 
@@ -20,7 +19,7 @@ class AuthMiddleware implements Middleware
     /**
      * @throws HttpException
      */
-     public function interceptRequest()
+    public function interceptRequest()
     {
         $path = explode("?", $_SERVER["REQUEST_URI"])[0];
         if ($path == "/auth/login") {
@@ -55,7 +54,7 @@ QUERY;
     /**
      * @throws HttpException
      */
-     public function interceptResponse(View $response)
+    public function interceptResponse(View $response)
     {
         // 세션 유지시간 다시 30분
         if (!key_exists("session_id", $_COOKIE)) {
@@ -71,14 +70,14 @@ WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
         safeMysqliQuery($conn, $query);
         if (!setcookie("session_id", $_COOKIE["session_id"],
-             $expiredAt->getTimestamp(), "/", "", "", true)) {
+            $expiredAt->getTimestamp(), "/", "", "", true)) {
             $conn->close();
             throw new HttpException("로그인 세션을 쿠키에 할당할 수 없습니다.");
         }
         $conn->close();
     }
 
-     private function alertLogin()
+    private function alertLogin()
     {
         // 기존 쿠키 지우기
         if (key_exists("session_id", $_COOKIE)) {
