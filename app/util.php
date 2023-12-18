@@ -39,7 +39,7 @@ function getDbConn(): \mysqli
 /**
  * @throws HttpException
  */
-function safeMysqliQuery(\mysqli $conn, string $query): \mysqli_result|bool
+function safeMysqliQuery(\mysqli $conn, string $query)
 {
     $result = mysqli_query($conn, $query);
     if (!$result) {
