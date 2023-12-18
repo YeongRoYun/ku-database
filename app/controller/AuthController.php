@@ -23,7 +23,7 @@ class AuthController implements Controller
     /**
      * @throws HttpException
      */
-    private AuthBusiness $authBusiness;
+    private $authBusiness;
 
     public function __construct()
     {
@@ -44,9 +44,9 @@ class AuthController implements Controller
         if (!$pw) {
             throw new BadRequestHttpException("PW가 입력되지 않았습니다.");
         }
-        $sessionInfo = $this->authBusiness->login(id: $id, pw: $pw);
-        if (!setcookie(name: "session_id", value: $sessionInfo["sessionId"],
-            expires_or_options: $sessionInfo["expiredAt"]->getTimestamp(), path: "/", httponly: true)) {
+        $sessionInfo = $this->authBusiness->login($id, $pw);
+        if (!setcookie("session_id", $sessionInfo["sessionId"], $sessionInfo["expiredAt"]->getTimestamp(),
+            "/", "", "", true)) {
             throw new HttpException("세션을 쿠키에 할당할 수 없습니다.");
         }
         return new RedirectView("/");
@@ -61,9 +61,9 @@ class AuthController implements Controller
             return new RedirectView("/");
         }
         $sessionId = $_COOKIE["session_id"];
-        $this->authBusiness->logout(sessionId: $sessionId);
+        $this->authBusiness->logout($sessionId);
         // Set cookie
-        if (!setcookie(name: "session_id", value: $sessionId, expires_or_options: time() - 3600)) {
+        if (!setcookie("session_id", $sessionId, time() - 3600)) {
             throw new HttpException("세션을 쿠키에 할당할 수 없습니다.");
         }
         return new RedirectView("/");

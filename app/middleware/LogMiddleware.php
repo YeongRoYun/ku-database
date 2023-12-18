@@ -9,7 +9,7 @@ use app\ifs\View;
 
 class LogMiddleware implements Middleware
 {
-    private string $logfile;
+    private $logfile;
 
     public function __construct(string $logfile) {
         $this->logfile = $logfile;
@@ -17,7 +17,7 @@ class LogMiddleware implements Middleware
 
 
 
-    #[\Override] public function interceptRequest(): void
+    #[\Override] public function interceptRequest()
     {
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $requestUrl = $_SERVER["REQUEST_URI"];
@@ -26,7 +26,7 @@ class LogMiddleware implements Middleware
         error_log($log, "3", $this->logfile);
     }
 
-    #[\Override] public function interceptResponse(View $response): void
+    #[\Override] public function interceptResponse(View $response)
     {
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $requestUrl = $_SERVER["REQUEST_URI"];

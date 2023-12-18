@@ -5,14 +5,14 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
 class ProductListView extends AbstractView
 {
-    private string $filter;
-    private int $page;
-    private int $total;
-    private int $beg_page;
-    private int $end_page;
-    private array $columns;
-    private array $data;
-    private array $categories;
+    private $filter;
+    private $page;
+    private $total;
+    private $beg_page;
+    private $end_page;
+    private $columns;
+    private $data;
+    private $categories;
 
     public function __construct(string $filter, int $page, int $total, int $begPage, int $endPage,
                                 array  $columns, array $data, array $categories)
@@ -27,7 +27,7 @@ class ProductListView extends AbstractView
         $this->categories = $categories;
     }
 
-    #[\Override] public function draw(): void
+    #[\Override] public function draw()
     {
         $columns = array_map(function(string $col): string {return "<th>".$col."</th>";}, $this->columns);
         $header = array_reduce($columns, function(string $acc, string $cur): string {return $acc.$cur;}, "");
@@ -107,6 +107,6 @@ SCRIPT;
     </nav>
 </div>
 BODY;
-        echo $this->makeHtml(style: $style, script: $script, body: $body);
+        echo $this->makeHtml($style, $script, $body);
     }
 }

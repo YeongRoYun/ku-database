@@ -5,14 +5,14 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
 class ProductDetailView extends AbstractView
 {
-    private array $data;
+    private $data;
 
     public function __construct(array $data)
     {
         $this->data = $data;
     }
 
-    #[\Override] public function draw(): void
+    #[\Override] public function draw()
     {
         $style = <<<STYLE
 table, th, td {
@@ -98,6 +98,6 @@ STYLE;
     </p>
 </div>
 BODY;
-        echo $this->makeHtml(style: $style, body: $body);
+        echo $this->makeHtml($style, "", $body);
     }
 }

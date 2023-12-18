@@ -47,7 +47,7 @@ QUERY;
         return array("sessionId" => $sessionId, "expiredAt" => $expiredAt);
     }
 
-    public function logout(string $sessionId): void
+    public function logout(string $sessionId)
     {
         // Erase sessions
         $conn = getDbConn();

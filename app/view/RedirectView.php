@@ -6,14 +6,14 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
 class RedirectView extends AbstractView
 {
-    private string $path;
+    private $path;
 
     public function __construct(string $path)
     {
         $this->path = $path;
     }
 
-    #[\Override] public function draw(): void
+    #[\Override] public function draw()
     {
         header("Location: " . $this->path);
     }

@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\NoReturn;
 class HttpException extends \Exception
 {
     // Redefine the exception so message isn't optional
-    protected int $httpStatusCode;
+    protected $httpStatusCode;
 
     public function __construct(string $message, int $code = 0, \Throwable $previous = null, int $httpStatusCode = 500)
     {
@@ -54,7 +54,7 @@ class BadRequestHttpException extends HttpException
     }
 }
 
-function exception_handler(\Throwable $exception): void
+function exception_handler(\Throwable $exception)
 {
     if (is_subclass_of($exception, '\app\exception\HttpException')) {
         $status_code = $exception->getHttpStatusCode();

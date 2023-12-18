@@ -15,15 +15,15 @@ use app\ifs\View;
 
 class SimpleRouter implements Router
 {
-    private array $middlewares = array();
-    private array $routeTable = array();
+    private $middlewares = array();
+    private $routeTable = array();
 
 
     /**
      * @throws NotFoundHttpException
      * @throws NotAllowHttpException
      */
-    #[\Override] public function run(): void
+    #[\Override] public function run()
     {
         /* @var $middleware Middleware */
         foreach ($this->middlewares as $middleware) {
@@ -70,7 +70,7 @@ class SimpleRouter implements Router
     }
 
 
-    #[\Override] public function route(string $method, string $path, Controller $controller, string $func): void
+    #[\Override] public function route(string $method, string $path, Controller $controller, string $func)
     {
         if (!array_key_exists($path, $this->routeTable)) {
             $this->routeTable[$path] = array();
@@ -78,7 +78,7 @@ class SimpleRouter implements Router
         $this->routeTable[$path][] = array("method" => $method, "controller" => $controller, "func" => $func);
     }
 
-    #[\Override] public function register(Middleware $middleware): void
+    #[\Override] public function register(Middleware $middleware)
     {
         $this->middlewares[] = $middleware;
     }

@@ -177,7 +177,7 @@ QUERY;
     /**
      * @throws HttpException
      */
-    public function updateAttributes(int $id, array $updatedAttributes): void
+    public function updateAttributes(int $id, array $updatedAttributes)
     {
         $conn = getDbConn();
         safeMysqliQuery($conn, "SET autocommit=0;");

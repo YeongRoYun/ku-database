@@ -6,6 +6,6 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 
 interface Middleware
 {
-    public function interceptRequest(): void;
-    public function interceptResponse(View $response): void;
+    public function interceptRequest();
+    public function interceptResponse(View $response);
 }

@@ -23,7 +23,7 @@ use function app\util\safeMysqliQuery;
 
 class ProductController implements Controller
 {
-    private ProductBusiness $productBusiness;
+    private $productBusiness;
 
     public function __construct()
     {
@@ -61,10 +61,10 @@ class ProductController implements Controller
         } else {
             $page = intval($page);
         }
-        $res = $this->productBusiness->getList(categories: $categories, page: $page);
-        return new ProductListView(filter: $res["filter"], page: $res["page"], total: $res["total"],
-            begPage: $res["begPage"], endPage: $res["endPage"], columns: $res["columns"], data: $res["data"],
-            categories: $res["categories"]);
+        $res = $this->productBusiness->getList($categories, $page);
+        return new ProductListView($res["filter"], $res["page"], $res["total"],
+            $res["begPage"], $res["endPage"], $res["columns"], $res["data"],
+            $res["categories"]);
     }
 
     /**
@@ -81,8 +81,8 @@ class ProductController implements Controller
         }
         $productId = intval($productId);
 
-        $product = $this->productBusiness->getDetail(id: $productId);
-        return new \app\view\ProductDetailView(data: $product);
+        $product = $this->productBusiness->getDetail($productId);
+        return new \app\view\ProductDetailView($product);
     }
 
     /**
@@ -99,11 +99,11 @@ class ProductController implements Controller
         }
         $productId = intval($productId);
 
-        $product = $this->productBusiness->getDetail(id: $productId);
+        $product = $this->productBusiness->getDetail($productId);
 
         // 5. 수정 사능한 속성 정보
         $mutableAttributes = $this->productBusiness->getMutableAttributes();
-        return new \app\view\ProductMutableView(data: $product, mutableAttributes: $mutableAttributes);
+        return new \app\view\ProductMutableView($product, $mutableAttributes);
     }
 
     /**
@@ -117,7 +117,7 @@ class ProductController implements Controller
             $updatedAttributes["category"] = $_POST["category"];
         }
         // update
-        $this->productBusiness->updateAttributes(id: $productId, updatedAttributes: $updatedAttributes);
+        $this->productBusiness->updateAttributes($productId, $updatedAttributes);
         return new RedirectView("/products/$productId");
     }
 }

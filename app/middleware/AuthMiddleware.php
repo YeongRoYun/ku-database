@@ -20,7 +20,7 @@ class AuthMiddleware implements Middleware
     /**
      * @throws HttpException
      */
-    #[\Override] public function interceptRequest(): void
+    #[\Override] public function interceptRequest()
     {
         $path = explode("?", $_SERVER["REQUEST_URI"])[0];
         if ($path == "/auth/login") {
@@ -55,7 +55,7 @@ QUERY;
     /**
      * @throws HttpException
      */
-    #[\Override] public function interceptResponse(View $response): void
+    #[\Override] public function interceptResponse(View $response)
     {
         // 세션 유지시간 다시 30분
         if (!key_exists("session_id", $_COOKIE)) {
@@ -70,19 +70,19 @@ UPDATE sessions SET expired_at="{$expiredAt->format("Y-m-d H:i:s")}"
 WHERE id="{$_COOKIE["session_id"]}";
 QUERY;
         safeMysqliQuery($conn, $query);
-        if (!setcookie(name: "session_id", value: $_COOKIE["session_id"],
-            expires_or_options: $expiredAt->getTimestamp(), path: "/", httponly: true)) {
+        if (!setcookie("session_id", $_COOKIE["session_id"],
+             $expiredAt->getTimestamp(), "/", "", "", true)) {
             $conn->close();
             throw new HttpException("로그인 세션을 쿠키에 할당할 수 없습니다.");
         }
         $conn->close();
     }
 
-    #[NoReturn] private function alertLogin(): void
+    #[NoReturn] private function alertLogin()
     {
         // 기존 쿠키 지우기
         if (key_exists("session_id", $_COOKIE)) {
-            setcookie(name: "session_id", value: $_COOKIE["session_id"], expires_or_options: time() - 3600);
+            setcookie("session_id", $_COOKIE["session_id"], time() - 3600);
         }
         $loginView = new LoginView();
         $loginView->draw();

@@ -6,7 +6,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 class LoginView extends AbstractView
 {
 
-    #[\Override] public function draw(): void
+    #[\Override] public function draw()
     {
         $body = <<<BODY
 <form action="/auth/login" method="post">
@@ -17,6 +17,6 @@ class LoginView extends AbstractView
     <input type="submit" value="Submit">
 </form>
 BODY;
-        echo $this->makeHtml(body: $body);
+        echo $this->makeHtml("", "", $body);
     }
 }

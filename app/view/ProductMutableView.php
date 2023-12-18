@@ -5,8 +5,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
 class ProductMutableView extends AbstractView
 {
-    private array $data;
-    private array $mutableAttributes;
+    private $data;
+    private $mutableAttributes;
 
     public function __construct(array $data, array $mutableAttributes)
     {
@@ -14,7 +14,7 @@ class ProductMutableView extends AbstractView
         $this->mutableAttributes = $mutableAttributes;
     }
 
-    #[\Override] public function draw(): void
+    #[\Override] public function draw()
     {
         $style = <<<STYLE
 table, th, td {
@@ -113,6 +113,6 @@ STYLE;
     </form>
 </div>
 BODY;
-        echo $this->makeHtml(style: $style, body: $body);
+        echo $this->makeHtml($style, "", $body);
     }
 }
