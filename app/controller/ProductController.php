@@ -75,7 +75,11 @@ class ProductController implements Controller
     public function getDetail(): ProductDetailView
     {
         // 1. get id
-        $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        if (!key_exists("id", $_GET)) {
+        	throw new BadRequestHttpException("Empty ID Query");
+        }
+        $productId = $_GET["id"];
         if (!preg_match("/\d+/i", $productId)) {
             throw new BadRequestHttpException("상품 ID는 정수여야 합니다.");
         }
@@ -93,7 +97,11 @@ class ProductController implements Controller
     public function getMutable(): ProductMutableView
     {
         // 1. get id
-        $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        if (!key_exists("id", $_GET)) {
+        	throw new BadRequestHttpException("Empty ID Query");
+        }
+        $productId = $_GET["id"];
         if (!preg_match("/\d+/i", $productId)) {
             throw new BadRequestHttpException("상품 ID는 정수여야 합니다.");
         }
@@ -111,13 +119,17 @@ class ProductController implements Controller
      */
     public function updateAttributes(): RedirectView
     {
-        $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
+        if (!key_exists("id", $_GET)) {
+        	throw new BadRequestHttpException("Empty ID Query");
+        }
+        $productId = $_GET["id"];
         $updatedAttributes = array();
         if (key_exists("category", $_POST)) {
             $updatedAttributes["category"] = $_POST["category"];
         }
         // update
         $this->productBusiness->updateAttributes($productId, $updatedAttributes);
-        return new RedirectView("/products/$productId");
+        return new RedirectView("/products/detail.php?id=$productId");
     }
 }

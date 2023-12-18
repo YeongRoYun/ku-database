@@ -47,11 +47,11 @@ STYLE;
 <div>
     <ul class="menu">
         <li>
-            <form action="/auth/logout" method="post">
+            <form action="/~2018320135/ku-database/auth/logout.php" method="post">
                 <input type="submit" value="로그아웃">
             </form>
         </li>
-        <li><button onclick="location.href='/products'">상품리스트</button></li>
+        <li><button onclick="location.href='/~2018320135/ku-database/products'">상품리스트</button></li>
     </ul>
 </div>
 <br/>

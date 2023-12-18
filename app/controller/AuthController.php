@@ -63,7 +63,7 @@ class AuthController implements Controller
         $sessionId = $_COOKIE["session_id"];
         $this->authBusiness->logout($sessionId);
         // Set cookie
-        if (!setcookie("session_id", $sessionId, time() - 3600)) {
+        if (!setcookie("session_id", $_COOKIE["session_id"], time() - 3600, "/", "", "", true)) {
             throw new HttpException("세션을 쿠키에 할당할 수 없습니다.");
         }
         return new RedirectView("/");

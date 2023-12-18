@@ -1,4 +1,7 @@
 <?php
+$_SERVER["DOCUMENT_ROOT"] = dirname(__DIR__) . "/ku-database";
+$_SERVER["REQUEST_URI"] = str_replace("/~2018320135/ku-database", "", $_SERVER["REQUEST_URI"]);
+
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/SimpleRouter.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/middleware/LogMiddleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/middleware/AuthMiddleware.php";
@@ -20,7 +23,7 @@ $router->route("POST", "/auth/login", $authController, "login");
 $router->route("POST", "/auth/logout", $authController, "logout");
 $router->route("GET", "/", $productController, "getList");
 $router->route("GET", "/products", $productController, "getList");
-$router->route("GET", "/products/{id}", $productController, "getDetail");
-$router->route("GET", "/products/mutable/{id}", $productController, "getMutable");
-$router->route("POST", "/products/{id}", $productController, "updateAttributes");
+$router->route("GET", "/products/detail", $productController, "getDetail");
+$router->route("GET", "/products/mutable", $productController, "getMutable");
+$router->route("POST", "/products/detail", $productController, "updateAttributes");
 $router->run();

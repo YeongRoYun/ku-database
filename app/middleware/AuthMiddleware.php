@@ -81,7 +81,7 @@ QUERY;
     {
         // 기존 쿠키 지우기
         if (key_exists("session_id", $_COOKIE)) {
-            setcookie("session_id", $_COOKIE["session_id"], time() - 3600);
+            setcookie("session_id", $_COOKIE["session_id"], time() - 3600, "/", "", "", true);
         }
         $loginView = new LoginView();
         $loginView->draw();

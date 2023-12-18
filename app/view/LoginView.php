@@ -8,8 +8,9 @@ class LoginView extends AbstractView
 
      public function draw()
     {
+    	$loginUrl = "/~2018320135/ku-database/auth/login.php";
         $body = <<<BODY
-<form action="/auth/login" method="post">
+<form action="$loginUrl" method="post">
     <label for="id">ID:</label><br>
     <input type="text" id="id" name="id"><br>
     <label for="password">Password:</label><br>

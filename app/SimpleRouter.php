@@ -29,9 +29,9 @@ class SimpleRouter implements Router
         foreach ($this->middlewares as $middleware) {
             $middleware->interceptRequest();
         }
-
         $curPath = explode("?", $_SERVER["REQUEST_URI"])[0];
         $curMethod = $_SERVER["REQUEST_METHOD"];
+        
         $hasPath = false;
         $hasMethod = false;
         $controller = null;

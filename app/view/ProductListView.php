@@ -1,5 +1,4 @@
 <?php
-
 namespace app\view;
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 
@@ -35,7 +34,7 @@ class ProductListView extends AbstractView
         /* @var $col string */
         $body = "<tbody>";
         foreach ($this->data as $row) {
-            $row_info = "<tr onclick=\"window.location.href='/products/{$row["id"]}'\">";
+            $row_info = "<tr onclick=\"window.location.href='/~2018320135/ku-database/products/detail.php?id={$row["id"]}'\">";
             foreach ($this->columns as $col) {
                 if ($col == "image") {
                     $row_info = $row_info . "<td><img src='$row[$col]' alt='$row[$col]' width='100' height='100'/></td>";
@@ -52,7 +51,7 @@ class ProductListView extends AbstractView
         $nxt_page = min($this->page + 1, $this->end_page);
 
         // Category Filter
-        $filterForm = "<form id='filter-form' method=\"GET\" action=\"/products\">";
+        $filterForm = "<form id='filter-form' method=\"GET\" action=\"/~2018320135/ku-database/products\">";
         foreach ($this->categories as $categoryId => $categoryName) {
             $filterForm = $filterForm . "<input type=\"checkbox\" name=\"category\" value=\"$categoryId\" /> $categoryName <br/>";
         }
@@ -101,9 +100,9 @@ SCRIPT;
         $body
     </table>
     <nav class="pagination">
-        <a href="/products?categories=$this->filter&page=$prv_page" class="prev">이전페이지</a>
-        <a href="/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
-        <a href="/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
+        <a href="/~2018320135/ku-database/products?categories=$this->filter&page=$prv_page" class="prev">이전페이지</a>
+        <a href="/~2018320135/ku-database/products?categories=$this->filter&page=$this->page" class="selected">$this->page</a>
+        <a href="/~2018320135/ku-database/products?categories=$this->filter&page=$nxt_page" class="next">다음페이지</a>
     </nav>
 </div>
 BODY;

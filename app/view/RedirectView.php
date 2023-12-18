@@ -15,6 +15,7 @@ class RedirectView extends AbstractView
 
      public function draw()
     {
-        header("Location: " . $this->path);
+    	$url = "/~2018320135/ku-database" . $this->path;
+        header("Location: " . $url);
     }
 }

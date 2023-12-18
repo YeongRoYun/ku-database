@@ -48,7 +48,7 @@ STYLE;
     <img src="{$this->data["image"]}" alt="{$this->data["name"]}"/>
 </div>
 <div>
-    <form action="/products/{$this->data["id"]}" method="POST">
+    <form action="/~2018320135/ku-database/products/detail.php?id={$this->data["id"]}" method="POST">
         <input type="submit" value="수정하기" />
         <h2>설명</h2>
         <p>{$this->data["description"]}</p>
