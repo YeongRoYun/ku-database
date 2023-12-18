@@ -78,7 +78,7 @@ QUERY;
         $conn->close();
     }
 
-    #[NoReturn] private function alertLogin()
+     private function alertLogin()
     {
         // 기존 쿠키 지우기
         if (key_exists("session_id", $_COOKIE)) {
