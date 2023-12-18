@@ -1,8 +1,8 @@
 <?php
 
 namespace app\controller;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Controller.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Controller.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductListView.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductDetailView.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/ProductMutableView.php";
@@ -13,7 +13,7 @@ use app\business\ProductBusiness;
 use app\exception\BadRequestHttpException;
 use app\exception\HttpException;
 use app\exception\NotFoundHttpException;
-use app\interface\Controller;
+use app\ifs\Controller;
 use app\view\ProductDetailView;
 use app\view\ProductListView;
 use app\view\ProductMutableView;

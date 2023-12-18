@@ -1,8 +1,8 @@
 <?php
 
-namespace app\interface;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Controller.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Middleware.php";
+namespace app\ifs;
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Controller.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Middleware.php";
 
 interface Router
 {

@@ -1,11 +1,11 @@
 <?php
 
 namespace app\middleware;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Middleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Middleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 
-use app\interface\Middleware;
-use app\interface\View;
+use app\ifs\Middleware;
+use app\ifs\View;
 
 class LogMiddleware implements Middleware
 {

@@ -1,17 +1,17 @@
 <?php
 
 namespace app;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Router.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Controller.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Middleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Router.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Controller.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Middleware.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
 
 use app\exception\NotAllowHttpException;
 use app\exception\NotFoundHttpException;
-use app\interface\Controller;
-use app\interface\Middleware;
-use app\interface\Router;
-use app\interface\View;
+use app\ifs\Controller;
+use app\ifs\Middleware;
+use app\ifs\Router;
+use app\ifs\View;
 
 class SimpleRouter implements Router
 {

@@ -1,12 +1,12 @@
 <?php
 
 namespace app\business;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Business.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Business.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
 
 use app\exception\HttpException;
 use app\exception\NotFoundHttpException;
-use app\interface\Business;
+use app\ifs\Business;
 use function app\util\getDbConn;
 use function app\util\safeMysqliQuery;
 

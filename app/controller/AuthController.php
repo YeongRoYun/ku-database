@@ -1,8 +1,8 @@
 <?php
 
 namespace app\controller;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Controller.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Controller.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/RedirectView.php";
@@ -11,8 +11,8 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/business/AuthBusiness.php";
 use app\business\AuthBusiness;
 use app\exception\BadRequestHttpException;
 use app\exception\HttpException;
-use app\interface\Controller;
-use app\interface\View;
+use app\ifs\Controller;
+use app\ifs\View;
 use app\view\RedirectView;
 use function app\util\getConfig;
 use function app\util\getDbConn;

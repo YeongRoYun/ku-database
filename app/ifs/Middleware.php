@@ -1,8 +1,8 @@
 <?php
 
-namespace app\interface;
+namespace app\ifs;
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 
 interface Middleware
 {

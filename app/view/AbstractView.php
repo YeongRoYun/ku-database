@@ -1,9 +1,9 @@
 <?php
 
 namespace app\view;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 
-use app\interface\View;
+use app\ifs\View;
 
 abstract class AbstractView implements View
 {

@@ -1,14 +1,14 @@
 <?php
 
 namespace app\middleware;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Middleware.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Middleware.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/LoginView.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
 
 use app\exception\HttpException;
-use app\interface\Middleware;
-use app\interface\View;
+use app\ifs\Middleware;
+use app\ifs\View;
 use app\view\LoginView;
 use JetBrains\PhpStorm\NoReturn;
 use function app\util\getDbConn;

@@ -1,14 +1,14 @@
 <?php
 
 namespace app\business;
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/Business.php";
-require_once $_SERVER["DOCUMENT_ROOT"] . "/app/interface/View.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/Business.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/app/ifs/View.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/exception/http.php";
 require_once $_SERVER["DOCUMENT_ROOT"] . "/app/util.php";
 
 use app\exception\BadRequestHttpException;
 use app\exception\HttpException;
-use app\interface\Business;
+use app\ifs\Business;
 use function app\util\getConfig;
 use function app\util\getDbConn;
 use function app\util\safeMysqliQuery;
