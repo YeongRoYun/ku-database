@@ -23,7 +23,7 @@ class SimpleRouter implements Router
      * @throws NotFoundHttpException
      * @throws NotAllowHttpException
      */
-    #[\Override] public function run()
+     public function run()
     {
         /* @var $middleware Middleware */
         foreach ($this->middlewares as $middleware) {
@@ -70,7 +70,7 @@ class SimpleRouter implements Router
     }
 
 
-    #[\Override] public function route(string $method, string $path, Controller $controller, string $func)
+     public function route(string $method, string $path, Controller $controller, string $func)
     {
         if (!array_key_exists($path, $this->routeTable)) {
             $this->routeTable[$path] = array();
@@ -78,7 +78,7 @@ class SimpleRouter implements Router
         $this->routeTable[$path][] = array("method" => $method, "controller" => $controller, "func" => $func);
     }
 
-    #[\Override] public function register(Middleware $middleware)
+     public function register(Middleware $middleware)
     {
         $this->middlewares[] = $middleware;
     }

@@ -27,7 +27,7 @@ class ProductListView extends AbstractView
         $this->categories = $categories;
     }
 
-    #[\Override] public function draw()
+     public function draw()
     {
         $columns = array_map(function(string $col): string {return "<th>".$col."</th>";}, $this->columns);
         $header = array_reduce($columns, function(string $acc, string $cur): string {return $acc.$cur;}, "");

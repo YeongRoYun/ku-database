@@ -20,7 +20,7 @@ class AuthMiddleware implements Middleware
     /**
      * @throws HttpException
      */
-    #[\Override] public function interceptRequest()
+     public function interceptRequest()
     {
         $path = explode("?", $_SERVER["REQUEST_URI"])[0];
         if ($path == "/auth/login") {
@@ -55,7 +55,7 @@ QUERY;
     /**
      * @throws HttpException
      */
-    #[\Override] public function interceptResponse(View $response)
+     public function interceptResponse(View $response)
     {
         // 세션 유지시간 다시 30분
         if (!key_exists("session_id", $_COOKIE)) {

@@ -17,7 +17,7 @@ class LogMiddleware implements Middleware
 
 
 
-    #[\Override] public function interceptRequest()
+     public function interceptRequest()
     {
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $requestUrl = $_SERVER["REQUEST_URI"];
@@ -26,7 +26,7 @@ class LogMiddleware implements Middleware
         error_log($log, "3", $this->logfile);
     }
 
-    #[\Override] public function interceptResponse(View $response)
+     public function interceptResponse(View $response)
     {
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $requestUrl = $_SERVER["REQUEST_URI"];

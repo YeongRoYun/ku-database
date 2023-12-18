@@ -13,7 +13,7 @@ class RedirectView extends AbstractView
         $this->path = $path;
     }
 
-    #[\Override] public function draw()
+     public function draw()
     {
         header("Location: " . $this->path);
     }

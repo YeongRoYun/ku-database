@@ -6,7 +6,7 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/app/view/AbstractView.php";
 class LoginView extends AbstractView
 {
 
-    #[\Override] public function draw()
+     public function draw()
     {
         $body = <<<BODY
 <form action="/auth/login" method="post">

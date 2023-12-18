@@ -14,7 +14,7 @@ class ProductMutableView extends AbstractView
         $this->mutableAttributes = $mutableAttributes;
     }
 
-    #[\Override] public function draw()
+     public function draw()
     {
         $style = <<<STYLE
 table, th, td {
