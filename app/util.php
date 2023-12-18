@@ -27,8 +27,8 @@ function getDbConn(): \mysqli
         throw new HttpException("Database 설정을 찾을 수 없습니다.");
     }
     $database = $config["database"];
-    $conn = mysqli_connect(hostname: $database["host"], username: $database["user"],
-        password: $database["password"], port: $database["port"], database: $database["db"]);
+    $conn = mysqli_connect($database["host"], $database["user"],
+        $database["password"], $database["db"], $database["port"]);
     if (!$conn) {
         throw new HttpException("DB에 연결할 수 없습니다.");
     } else {
