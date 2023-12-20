@@ -64,13 +64,17 @@ function exception_handler(\Throwable $exception)
         $message = "예상하지 못한 예외가 발생했습니다.: " . $exception->getMessage();
     }
     $html = <<<HTML
-<script>alert("$message")</script>
+<body>
+    <script>alert("$message")</script>
+    <button onclick="location.href='/~2018320135/ku-database'">홈화면</button>
+</body>
+
 HTML;
     if ($status_code == 500) {
         var_dump($exception);
         die($html);
     } else {
-        header("Location: " . "/~2018320135/ku-database");
+        // header("Location: " . "/~2018320135/ku-database");
         die($html);
     }
 
