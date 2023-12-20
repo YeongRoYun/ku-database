@@ -183,7 +183,12 @@ QUERY;
         safeMysqliQuery($conn, "SET autocommit=0;");
         safeMysqliQuery($conn, "SET session TRANSACTION ISOLATION LEVEL serializable;");
         safeMysqliQuery($conn, "begin;");
-        safeMysqliQuery($conn, "UPDATE products SET category_id={$updatedAttributes["category"]} WHERE id=$id");
+        if (key_exists("category", $updatedAttributes)) {
+            safeMysqliQuery($conn, "UPDATE products SET category_id={$updatedAttributes["category"]} WHERE id=$id");
+        }
+        if (key_exists("description", $updatedAttributes)) {
+            safeMysqliQuery($conn, "UPDATE products SET description=\"{$updatedAttributes["description"]}\" WHERE id=$id");
+        }
         safeMysqliQuery($conn, "commit");
         $conn->close();
     }

@@ -52,7 +52,7 @@ STYLE;
     	<input type="hidden" name="id" value="{$this->data["id"]}" />
         <input type="submit" value="수정하기" />
         <h2>설명</h2>
-        <p>{$this->data["description"]}</p>
+        <p><input type="text" name="description" value="{$this->data["description"]}"/></p>
         <h2>기본 정보</h2>
         <p>
             <table>
