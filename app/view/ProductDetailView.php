@@ -12,7 +12,7 @@ class ProductDetailView extends AbstractView
         $this->data = $data;
     }
 
-     public function draw()
+    public function draw()
     {
         $style = <<<STYLE
 table, th, td {

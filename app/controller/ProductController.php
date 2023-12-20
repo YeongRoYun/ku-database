@@ -77,7 +77,7 @@ class ProductController implements Controller
         // 1. get id
         // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
         if (!key_exists("id", $_GET)) {
-        	throw new BadRequestHttpException("Empty ID Query");
+            throw new BadRequestHttpException("Empty ID Query");
         }
         $productId = $_GET["id"];
         if (!preg_match("/\d+/i", $productId)) {
@@ -99,7 +99,7 @@ class ProductController implements Controller
         // 1. get id
         // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
         if (!key_exists("id", $_GET)) {
-        	throw new BadRequestHttpException("Empty ID Query");
+            throw new BadRequestHttpException("Empty ID Query");
         }
         $productId = $_GET["id"];
         if (!preg_match("/\d+/i", $productId)) {
@@ -120,16 +120,22 @@ class ProductController implements Controller
     public function updateAttributes(): RedirectView
     {
         // $productId = $_REQUEST["PATH_VARIABLES"]["id"];
-        if (!key_exists("id", $_GET)) {
-        	throw new BadRequestHttpException("Empty ID Query");
+        if (!key_exists("id", $_POST)) {
+            throw new BadRequestHttpException("Empty ID Query");
         }
-        $productId = $_GET["id"];
+        $productId = $_POST["id"];
         $updatedAttributes = array();
         if (key_exists("category", $_POST)) {
             $updatedAttributes["category"] = $_POST["category"];
         }
         // update
         $this->productBusiness->updateAttributes($productId, $updatedAttributes);
-        return new RedirectView("/products/detail.php?id=$productId");
+
+        if (!key_exists("redirect", $_POST)) {
+            $redirectUrl = "/products/detail.php?id=$productId";
+        } else {
+            $redirectUrl = $_POST["redirect"];
+        }
+        return new RedirectView($redirectUrl);
     }
 }
